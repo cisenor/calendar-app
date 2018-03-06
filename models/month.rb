@@ -1,5 +1,11 @@
+# Defines a month object
 class Month
-	def initialize(name)
-		puts name
-	end
+  attr_reader :name
+  def initialize(name)
+    @name = name
+  end
+
+  def to_s
+    @name
+  end
 end

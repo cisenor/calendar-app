@@ -1,6 +1,8 @@
 
 require_relative 'models/month.rb'
 require_relative 'utilities/command_line_utilities.rb'
+require_relative 'models/year.rb'
+require_relative 'models/renderer.rb'
 
 def prompt_for_year
   puts 'Enter a year (four-digit number):'
@@ -14,7 +16,10 @@ end
 
 def main
   clear_console
-  year = prompt_for_year
+  y = 2001 # prompt_for_year
+  year = Year.new(y)
+  renderer = Renderer.new
+  renderer.render_year(year)
 end
 
 main

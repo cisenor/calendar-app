@@ -1,7 +1,7 @@
 require 'date'
 
 # Object that holds all holidays
-class HolidayManager
+class HolidayList
   attr_reader :holidays
   def initialize
     @holidays = []

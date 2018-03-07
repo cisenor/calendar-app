@@ -1,5 +1,5 @@
 require_relative './year.rb'
-require_relative './holiday_manager.rb'
+require_relative './holiday_list.rb'
 
 # Renders the supplied year class. Each month will be 20
 # chars wide. (2 digits * 7 + spacing between each column)
@@ -70,9 +70,9 @@ class Renderer
   end
 
   # Render all holidays as name - date
-  def render_holidays(holiday_manager)
-    raise ArgumentError if holiday_manager.class != HolidayManager
-    holidays = holiday_manager.holidays
+  def render_holidays(holiday_list)
+    raise ArgumentError if holiday_list.class != HolidayList
+    holidays = holiday_list.holidays
     puts 'Holidays:'
     holidays.each do |holiday|
       puts holiday

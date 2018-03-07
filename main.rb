@@ -1,14 +1,14 @@
-
 require_relative 'models/month.rb'
 require_relative 'utilities/command_line_utilities.rb'
 require_relative 'models/year.rb'
 require_relative 'models/renderer.rb'
-require_relative 'models/holiday_manager.rb'
+require_relative 'models/holiday_list.rb'
 
 @renderer = Renderer.new
-@holiday_manager = HolidayManager.new
+@holiday_list = HolidayList.new
 @input = ''
 @year = 0
+
 def prompt_for_year
   clear_console
   puts 'Enter a year (four-digit number):'
@@ -51,22 +51,22 @@ def add_holiday
   puts ''
   print 'What date does the holiday fall on? (mm-dd format) '
   date = gets.chomp
-  @holiday_manager.add_holiday(name, date)
-  @holiday_manager.sort
+  @holiday_list.add_holiday(name, date)
+  @holiday_list.sort
   clear_console
-  @renderer.render_holidays(@holiday_manager)
+  @renderer.render_holidays(@holiday_list)
 end
 
 def display_year
   clear_console
   @renderer.render_year(Year.new(@year))
   @renderer.new_line
-  @renderer.render_holidays(@holiday_manager)
+  @renderer.render_holidays(@holiday_list)
 end
 
 def display_holidays
   clear_console
-  @renderer.render_holidays(@holiday_manager)
+  @renderer.render_holidays(@holiday_list)
 end
 
 def app_loop

@@ -11,3 +11,9 @@ Display calendar for year.
 Display all known holidays.
 User can choose to enter a new holiday.
 User enters date, then enters holiday description.
+
+A month will look like:
+    September    
+Su Mo Tu We Th Fr Sa
+   01 02 03 04 05 06
+07 08 09

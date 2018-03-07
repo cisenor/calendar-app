@@ -12,11 +12,12 @@ def prompt_for_year
     return prompt_for_year
   end
   puts 'You entered: ' + year
+  year.to_i
 end
 
 def main
   clear_console
-  y = 2001 # prompt_for_year
+  y = prompt_for_year
   year = Year.new(y)
   renderer = Renderer.new
   renderer.render_year(year)

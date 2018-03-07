@@ -17,11 +17,12 @@ class Month
   end
 
   def create_weeks
-    @weeks = [], days = (@start_day..@last_day).to_a
+    @weeks = []
+    days = (@start_day..@last_day).to_a
     @weeks << create_first_week(days)
     until days.empty?
       week = []
-      6.times do
+      7.times do
         week << days.shift
       end
       @weeks << week

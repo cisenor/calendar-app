@@ -10,6 +10,7 @@ require_relative 'models/holiday_manager.rb'
 @input = ''
 @year = 0
 def prompt_for_year
+  clear_console
   puts 'Enter a year (four-digit number):'
   year = gets.chomp
   if year.to_i < 1000 || year.to_i > 9999
@@ -21,7 +22,7 @@ def prompt_for_year
 end
 
 def prompt_for_input
-  puts 'Commands: Show full year (Y), View holidays (H), Add holiday (A), Exit (X)'
+  puts 'Commands: Show full year (Y), Change year (C), View holidays (H), Add holiday (A), Exit (X)'
   @input = gets.chomp.upcase
 end
 
@@ -33,6 +34,9 @@ def process_input
     display_holidays
   when 'A'
     add_holiday
+  when 'C'
+    @year = prompt_for_year
+    display_year
   when 'X'
     puts 'Exiting...'
   else
@@ -48,7 +52,8 @@ def add_holiday
   print 'What date does the holiday fall on? (mm-dd format) '
   date = gets.chomp
   @holiday_manager.add_holiday(name, date)
-  @renderer.new_line
+  @holiday_manager.sort
+  clear_console
   @renderer.render_holidays(@holiday_manager)
 end
 
@@ -75,6 +80,7 @@ end
 def main
   clear_console
   @year = prompt_for_year
+  display_year
   app_loop
 end
 

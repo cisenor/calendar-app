@@ -5,6 +5,11 @@ class HolidayManager
   attr_reader :holidays
   def initialize
     @holidays = []
+    @holidays << Holiday.new('Christmas', '12-25')
+    @holidays << Holiday.new('Easter', '4-2')
+    @holidays << Holiday.new('Remembrance Day', '11-11')
+    @holidays << Holiday.new('Thanksgiving', '10-8')
+    sort
   end
 
   def sort

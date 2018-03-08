@@ -5,7 +5,7 @@ class HolidayList
   attr_reader :holidays
   def initialize(year)
     @holidays = []
-    raise ArgumentError unless year.class == Year
+    raise ArgumentError, 'Year parameter must be of type Year, got ' + year.class unless year.class == Year
 
     # Thanksgiving: 2nd Monday of October
     october = year.months[9]
@@ -39,7 +39,7 @@ class Holiday
       @date = Date.strptime(date, '%m-%d-%y') if date =~ /\d{1,2}-\d{1,2}-\d{4}/
     end
     @date = date if date.class == Date
-    raise ArgumentError.new('Couldn\'t parse a date from ' + date.to_s) if @date.nil?
+    raise ArgumentError, 'Couldn\'t parse a date from ' + date.to_s if @date.nil?
   end
 
   def to_s

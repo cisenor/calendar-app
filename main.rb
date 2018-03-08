@@ -53,9 +53,10 @@ def display_holidays
 end
 
 def app_loop
-  until @input == :exit
+  loop do
     @input = @user_input.prompt_for_action
     process_input
+    break if @input == :exit
   end
 end
 

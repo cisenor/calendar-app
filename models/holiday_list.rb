@@ -44,6 +44,26 @@ class HolidayList
   rescue StandardError
     puts 'Can\'t create holiday with provided date: ' + date.to_s
   end
+
+  def holiday?(date)
+    if date.class == Date
+      date_is_holiday? date
+    elsif date.class == String
+      string_is_holiday? date
+    else
+      raise ArgumentError, 'Date must be either a string or a Date object'
+    end
+  end
+
+  def date_is_holiday?(date)
+    @holidays.any? { |h| h.date == date }
+  end
+
+  def string_is_holiday?(date)
+    @holidays.any? { |h| h.date.strftime('%m-%d') == date }
+  end
+
+  private :date_is_holiday?, :string_is_holiday?
 end
 
 # A single holiday object

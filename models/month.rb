@@ -50,6 +50,7 @@ class Month
       return week[weekday] if index == n
       index += 1
     end
+    nil
   end
 
   def to_s

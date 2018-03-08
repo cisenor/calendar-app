@@ -31,4 +31,9 @@ class TestMonth < Test::Unit::TestCase
     month = Month.new(2018, 3)
     assert_equal 17, month.nth_weekday_of_month(3, 6)
   end
+
+  def test_tenth_monday_of_month
+    month = Month.new(2018, 3)
+    assert_equal nil, month.nth_weekday_of_month(10, 2)
+  end
 end

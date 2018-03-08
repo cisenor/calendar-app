@@ -10,9 +10,8 @@ class Console
     gets.chomp
   end
 
-  def prompt_for_action(prompt)
-    prompt += ' ' unless prompt.end_with? ' '
-    print prompt
+  def prompt_for_action() 
+    print 'Commands: Show full year (Y), Change year (C), View holidays (H), Add holiday (A), Exit (X): '
     value = gets.chomp.upcase[0]
     case value
     when 'Y'

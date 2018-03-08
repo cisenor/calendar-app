@@ -5,14 +5,14 @@ require_relative 'models/holiday_list.rb'
 require_relative 'models/console.rb'
 
 @display = Display.new
-@console = Console.new
+@user_input = Console.new
 @input = ''
 @year = 0
 
 def prompt_for_year
-  year = @console.prompt_for_input('Enter a year (four-digit number):')
-  if year.to_i < 2000 || year.to_i > 3000
-    puts 'The year must be between 2000 & 3000'
+  year = @user_input.prompt_for_input('Enter a year (four-digit number):')
+  if year.to_i < 1970 || year.to_i > 3000
+    puts 'The year must be between 1970 & 3000'
     return prompt_for_year
   end
   @year = Year.new(year.to_i)
@@ -38,8 +38,8 @@ def process_input
 end
 
 def add_holiday
-  name = @console.prompt_for_input('Which holiday would you like to add? ')
-  date = @console.prompt_for_input('What date does the holiday fall on? (mm-dd format) ')
+  name = @user_input.prompt_for_input('Which holiday would you like to add? ')
+  date = @user_input.prompt_for_input('What date does the holiday fall on? (mm-dd format) ')
   @holiday_list.add_holiday(name, date)
   @holiday_list.sort
   @display.render_holidays(@holiday_list)
@@ -56,7 +56,7 @@ end
 def app_loop
   until @input == :exit
     @display.new_line
-    @input = @console.prompt_for_action('Commands: Show full year (Y), Change year (C), View holidays (H), Add holiday (A), Exit (X):')
+    @input = @user_input.prompt_for_action
     process_input
   end
 end

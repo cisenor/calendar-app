@@ -13,13 +13,13 @@ class Display
     ' '
   end
 
-  def center(string, total)
-    string.to_s.center total
+  def justify(string, total)
+    string.to_s.justify total
   end
 
   def render_year(year)
     raise ArgumentError 'Year must be a Year object' if year.class != Year
-    puts center year.year, 86
+    puts justify year.year, 86
     months = year.months
     display_months(months)
   end
@@ -30,7 +30,7 @@ class Display
       months = months[4, 12]
       display_str = ''
       these_months.each do |month|
-        display_str += center month.name, 22
+        display_str += justify month.name, 22
       end
       puts display_str
       display_weekdays
@@ -91,7 +91,13 @@ class Display
     puts ''
   end
 
+  def bold(string)
+    "\e[1m#{string}\e[0m"
+  end
+
   def write(input)
     puts input
   end
+
+  private :find_longest_month, :justify
 end

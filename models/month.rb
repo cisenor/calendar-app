@@ -30,13 +30,10 @@ class Month
   end
 
   def create_first_week(days)
-    week = []
     week_start = Date.new(@year, @month, days.first).wday
-    (0..6).each do |day|
-      this_day = (days.shift if day >= week_start)
-      week << this_day
+    (0..6).map do |day|
+      days.shift if day >= week_start
     end
-    week
   end
 
   def week(week_num)
@@ -61,4 +58,5 @@ class Month
   def to_s
     @name
   end
+  private :create_weeks, :create_first_week
 end

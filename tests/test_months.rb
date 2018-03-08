@@ -36,4 +36,15 @@ class TestMonth < Test::Unit::TestCase
     month = Month.new(2018, 3)
     assert_equal nil, month.nth_weekday_of_month(10, 2)
   end
+
+  ## API tests
+  def test_create_weeks_is_internal_only
+    month = Month.new(2018, 3)
+    assert_raise(NoMethodError) do
+      month.create_weeks
+    end
+    assert_raise(NoMethodError) do
+      month.create_first_week
+    end
+  end
 end

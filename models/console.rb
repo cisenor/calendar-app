@@ -14,7 +14,6 @@ class Console
     prompt += ' ' unless prompt.end_with? ' '
     print prompt
     value = gets.chomp.upcase[0]
-    puts value
     case value
     when 'Y'
       return :display_year

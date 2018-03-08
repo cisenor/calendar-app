@@ -21,4 +21,14 @@ class TestMonth < Test::Unit::TestCase
     week = month.week 1
     assert_equal [4, 5, 6, 7, 8, 9, 10], week
   end
+
+  def test_first_monday_of_month
+    month = Month.new(2018, 3)
+    assert_equal 5, month.nth_weekday_of_month(1, 1)
+  end
+
+  def test_third_saturday_of_month
+    month = Month.new(2018, 3)
+    assert_equal 17, month.nth_weekday_of_month(3, 6)
+  end
 end

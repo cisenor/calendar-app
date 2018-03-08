@@ -70,7 +70,8 @@ class Display
   end
 
   def display_all(year, holiday_list)
-    render_year(Year.new(year))
+    raise ArgumentError, 'Year argument must be of type Year. Got ' + year.class.to_s unless year.class == Year
+    render_year(year)
     render_holidays(holiday_list)
   end
 

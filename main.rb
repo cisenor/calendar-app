@@ -5,7 +5,6 @@ require_relative 'models/holiday_list.rb'
 require_relative 'models/console.rb'
 
 @display = Display.new
-@holiday_list = HolidayList.new
 @console = Console.new
 @input = ''
 @year = 0
@@ -16,7 +15,8 @@ def prompt_for_year
     puts 'The year must be between 2000 & 3000'
     return prompt_for_year
   end
-  year.to_i
+  @year = Year.new(year.to_i)
+  @holiday_list = HolidayList.new(@year)
 end
 
 def process_input
@@ -28,7 +28,7 @@ def process_input
   when :add_holiday
     add_holiday
   when :change_year
-    @year = prompt_for_year
+    prompt_for_year
     display_year
   when :exit
     @display.write('Exiting...')
@@ -62,7 +62,7 @@ def app_loop
 end
 
 def main
-  @year = prompt_for_year
+  prompt_for_year
   display_year
   app_loop
 end

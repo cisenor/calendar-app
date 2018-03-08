@@ -1,5 +1,5 @@
 require 'test/unit'
-require_relative '../models/holiday_manager.rb'
+require_relative '../models/holiday_list.rb'
 
 # Class used for testing the month class.
 class TestHolidays < Test::Unit::TestCase
@@ -30,11 +30,11 @@ class TestHolidays < Test::Unit::TestCase
   end
 
   def test_holiday_manager_sorts_holidays
-    hm = HolidayManager.new
+    hm = HolidayList.new
     hm.add_holiday('Christmas', '12-25')
     hm.add_holiday('Easter', '4-2')
     assert_equal 'Christmas - December 25', hm.holidays[0].to_s
-    hm.sort!
+    hm.sort
     assert_equal 'Easter - April 2', hm.holidays[0].to_s
   end
 end

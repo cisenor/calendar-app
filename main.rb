@@ -1,10 +1,10 @@
 require_relative 'models/month.rb'
 require_relative 'utilities/command_line_utilities.rb'
 require_relative 'models/year.rb'
-require_relative 'models/renderer.rb'
+require_relative 'models/display.rb'
 require_relative 'models/holiday_list.rb'
 
-@renderer = Renderer.new
+@display = Display.new
 @holiday_list = HolidayList.new
 @input = ''
 @year = 0
@@ -54,24 +54,21 @@ def add_holiday
   @holiday_list.add_holiday(name, date)
   @holiday_list.sort
   clear_console
-  @renderer.render_holidays(@holiday_list)
+  @display.render_holidays(@holiday_list)
 end
 
 def display_year
-  clear_console
-  @renderer.render_year(Year.new(@year))
-  @renderer.new_line
-  @renderer.render_holidays(@holiday_list)
+  @display.display_all(@year, @holiday_list)
 end
 
 def display_holidays
   clear_console
-  @renderer.render_holidays(@holiday_list)
+  @display.render_holidays(@holiday_list)
 end
 
 def app_loop
   until @input == 'X'
-    @renderer.new_line
+    @display.new_line
     prompt_for_input
     process_input
   end

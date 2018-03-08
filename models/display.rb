@@ -4,7 +4,7 @@ require_relative './holiday_list.rb'
 # Renders the supplied year class. Each month will be 20
 # chars wide. (2 digits * 7 + spacing between each column)
 # Header will be 86 characters wide (4 months + 2 chars padding between each)
-class Renderer
+class Display
   def self.horizontal_separator
     '  '
   end
@@ -35,7 +35,7 @@ class Renderer
       puts display_str
       display_weekdays
       display_days these_months
-      puts Renderer.vertical_separator * 86
+      puts Display.vertical_separator * 86
     end
   end
 
@@ -50,10 +50,10 @@ class Renderer
       display_str = ''
       months.each do |month|
         if month.week(week_num).nil?
-          display_str += ' ' * 20 + Renderer.horizontal_separator
+          display_str += ' ' * 20 + Display.horizontal_separator
         else
           display_values = month.week(week_num).map { |val| val.to_s.rjust 2 }
-          display_str += display_values.join(' ') + Renderer.horizontal_separator
+          display_str += display_values.join(' ') + Display.horizontal_separator
         end
       end
       puts display_str
@@ -67,6 +67,13 @@ class Renderer
     end
     print wkdy_str.rstrip
     puts ''
+  end
+
+  def display_all(year, holiday_list)
+    clear_console
+    render_year(Year.new(year))
+    new_line
+    render_holidays(holiday_list)
   end
 
   # Render all holidays as name - date

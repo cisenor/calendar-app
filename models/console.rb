@@ -9,8 +9,4 @@ class Console
     print prompt
     gets.chomp
   end
-
-  def write(input)
-    puts input
-  end
 end

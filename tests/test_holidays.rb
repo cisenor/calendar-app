@@ -28,13 +28,4 @@ class TestHolidays < Test::Unit::TestCase
     holiday = Holiday.new('Christmas', '12-25-2018')
     assert_equal 'Christmas - December 25', holiday.to_s
   end
-
-  def test_holiday_manager_sorts_holidays
-    hm = HolidayList.new
-    hm.add_holiday('Christmas', '12-25')
-    hm.add_holiday('Easter', '4-2')
-    assert_equal 'Christmas - December 25', hm.holidays[0].to_s
-    hm.sort
-    assert_equal 'Easter - April 2', hm.holidays[0].to_s
-  end
 end

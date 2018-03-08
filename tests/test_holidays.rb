@@ -28,4 +28,12 @@ class TestHolidays < Test::Unit::TestCase
     holiday = Holiday.new('Christmas', '12-25-2018')
     assert_equal 'Christmas - December 25', holiday.to_s
   end
+
+  def test_add_holiday_based_on_week
+    holiday_list = HolidayList.new(Year.new(2018))
+    holiday_list.create_holiday_based_on_week('Easter', 3, 1, 1)
+    assert_equal 'Easter - April 2', holiday_list.holidays[0].to_s
+    holiday_list.create_holiday_based_on_week('Thanksgiving', 9, 2, 1)
+    assert_equal 'Thanksgiving - October 8', holiday_list.holidays[1].to_s
+  end
 end

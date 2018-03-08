@@ -6,15 +6,17 @@ class HolidayList
   def initialize(year)
     @holidays = []
     raise ArgumentError, 'Year parameter must be of type Year, got ' + year.class unless year.class == Year
-    # Thanksgiving: 2nd Monday of October
-    october = year.months[9]
-    tday = october.nth_weekday_of_month(2, 1)
-    @holidays << Holiday.new('Thanksgiving', '10-' + tday.to_s)
+    @year = year
+  end
 
-    # Easter: 1st Monday in April
-    april = year.months[3]
-    eday = april.nth_weekday_of_month(1, 1)
-    @holidays << Holiday.new('Easter', '4-' + eday.to_s)
+  # Creates a holiday based on the nth weekday of the month.
+  # Params
+  # +name+:: The name of the holiday
+  # +nth+:: The week number (zero-indexed)
+  def create_holiday_based_on_week(name, month, nth, weekday)
+    selected_month = @year.months[month]
+    day = selected_month.nth_weekday_of_month(nth, weekday)
+    @holidays << Holiday.new(name, (month + 1).to_s + '-' + day.to_s)
     sort
   end
 

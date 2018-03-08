@@ -54,7 +54,6 @@ end
 
 def app_loop
   until @input == :exit
-    @display.new_line
     @input = @user_input.prompt_for_action
     process_input
   end

@@ -21,16 +21,16 @@ end
 
 def process_input
   case @input
-  when 'Y'
+  when :display_year
     display_year
-  when 'H'
+  when :display_holidays
     display_holidays
-  when 'A'
+  when :add_holiday
     add_holiday
-  when 'C'
+  when :change_year
     @year = prompt_for_year
     display_year
-  when 'X'
+  when :exit
     @display.write('Exiting...')
   else
     @display.write('Invalid input.')
@@ -54,9 +54,9 @@ def display_holidays
 end
 
 def app_loop
-  until @input == 'X'
+  until @input == :exit
     @display.new_line
-    @input = @console.prompt_for_input('Commands: Show full year (Y), Change year (C), View holidays (H), Add holiday (A), Exit (X)').upcase
+    @input = @console.prompt_for_action('Commands: Show full year (Y), Change year (C), View holidays (H), Add holiday (A), Exit (X):')
     process_input
   end
 end

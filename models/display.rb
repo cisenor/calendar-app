@@ -70,6 +70,7 @@ class Display
   end
 
   def display_all(year, holiday_list)
+    system 'clear'
     raise ArgumentError, 'Year argument must be of type Year. Got ' + year.class.to_s unless year.class == Year
     render_year(year)
     render_holidays(holiday_list)
@@ -79,6 +80,7 @@ class Display
   def render_holidays(holiday_list)
     raise ArgumentError if holiday_list.class != HolidayList
     holidays = holiday_list.holidays
+    puts ''
     puts 'Holidays:'
     holidays.each do |holiday|
       puts holiday

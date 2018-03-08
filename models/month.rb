@@ -43,11 +43,11 @@ class Month
     @weeks[week_num]
   end
 
-  def nth_weekday_of_month(n, weekday)
+  def nth_weekday_of_month(nth, weekday)
     index = 1
     weeks.each do |week|
       next if week[weekday].nil?
-      return week[weekday] if index == n
+      return week[weekday] if index == nth
       index += 1
     end
     nil

@@ -11,5 +11,8 @@ class TestDisplay < Test::Unit::TestCase
     assert_raise(NoMethodError) do
       @display.justify
     end
+    assert_raise(NoMethodError) do
+      @display.bold_if_holiday
+    end
   end
 end

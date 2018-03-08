@@ -3,5 +3,6 @@
     "editor.renderWhitespace": "all",
     "editor.insertSpaces": true,
     "AllAutocomplete.showCurrentDocument": false,
-    "AllAutocomplete.cycleOpenDocumentsOnLaunch": true
+    "AllAutocomplete.cycleOpenDocumentsOnLaunch": true,
+    "editor.mouseWheelScrollSensitivity": 0.5
 }

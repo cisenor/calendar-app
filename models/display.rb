@@ -14,17 +14,17 @@ class Display
   end
 
   def justify(string, total)
-    string.to_s.justify total
+    string.to_s.center total
   end
 
-  def render_year(year)
+  def render_year(year, holiday_list)
     raise ArgumentError 'Year must be a Year object' if year.class != Year
-    puts justify year.year, 86
+    puts justify(year.year, 86)
     months = year.months
-    display_months(months)
+    display_months(months, holiday_list)
   end
 
-  def display_months(months)
+  def display_months(months, holiday_list)
     until months.empty?
       these_months = months[0, 4]
       months = months[4, 12]
@@ -34,7 +34,7 @@ class Display
       end
       puts display_str
       display_weekdays
-      display_days these_months
+      display_days these_months, holiday_list
       puts Display.vertical_separator * 86
     end
   end
@@ -44,20 +44,29 @@ class Display
     sorted_months.first.weeks.length
   end
 
-  def display_days(months)
+  def display_days(months, holiday_list)
     longest_month = find_longest_month months
     (0...longest_month).each do |week_num|
       display_str = ''
-      months.each do |month|
+      months.map do |month|
         if month.week(week_num).nil?
           display_str += ' ' * 20 + Display.horizontal_separator
         else
-          display_values = month.week(week_num).map { |val| val.to_s.rjust 2 }
+          display_values = month.week(week_num).map do |day|
+            str_val = day.to_s.rjust 2
+            bold_if_holiday(str_val, month.month, day, holiday_list)
+          end
           display_str += display_values.join(' ') + Display.horizontal_separator
         end
       end
       puts display_str
     end
+  end
+
+  def bold_if_holiday(string, month, day, holiday_list)
+    return string if day.nil?
+    return bold(string) if holiday_list.holiday_by_month_day?(month, day)
+    string
   end
 
   def display_weekdays
@@ -72,7 +81,7 @@ class Display
   def display_all(year, holiday_list)
     system 'clear'
     raise ArgumentError, 'Year argument must be of type Year. Got ' + year.class.to_s unless year.class == Year
-    render_year(year)
+    render_year(year, holiday_list)
     render_holidays(holiday_list)
   end
 
@@ -99,5 +108,5 @@ class Display
     puts input
   end
 
-  private :find_longest_month, :justify
+  private :find_longest_month, :justify, :display_weekdays, :display_months, :bold_if_holiday
 end

@@ -45,6 +45,10 @@ class HolidayList
     puts 'Can\'t create holiday with provided date: ' + date.to_s
   end
 
+  def holiday_by_month_day?(month, day)
+    date_is_holiday?(Date.new(2018, month, day))
+  end
+
   def holiday?(date)
     if date.class == Date
       date_is_holiday? date

@@ -1,4 +1,5 @@
 require 'date'
+
 # Defines a month object
 class Month
   attr_reader :year
@@ -6,6 +7,7 @@ class Month
   attr_reader :last_day
   attr_reader :start_day
   attr_reader :weeks
+  attr_reader :month
   def initialize(year, month)
     @year = year
     @month = month

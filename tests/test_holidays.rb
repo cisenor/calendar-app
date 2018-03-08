@@ -54,4 +54,9 @@ class TestHolidays < Test::Unit::TestCase
     holiday_list = HolidayList.new(Year.new(2018))
     assert_false holiday_list.holiday?('13-55')
   end
+
+  def test_holiday_by_month_day
+    holiday_list = HolidayList.new(Year.new(2018))
+    assert_true holiday_list.holiday_by_month_day?(12, 25)
+  end
 end

@@ -16,8 +16,7 @@ class HolidayList
   def create_holiday_based_on_week(name, month, nth, weekday)
     selected_month = @year.months[month]
     day = selected_month.nth_weekday_of_month(nth, weekday)
-    @holidays << Holiday.new(name, (month + 1).to_s + '-' + day.to_s)
-    sort
+    add_holiday(name, (month + 1).to_s + '-' + day.to_s)
   end
 
   def sort

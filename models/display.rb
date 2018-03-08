@@ -70,9 +70,7 @@ class Display
   end
 
   def display_all(year, holiday_list)
-    clear_console
     render_year(Year.new(year))
-    new_line
     render_holidays(holiday_list)
   end
 
@@ -88,5 +86,9 @@ class Display
 
   def new_line
     puts ''
+  end
+
+  def write(input)
+    puts input
   end
 end

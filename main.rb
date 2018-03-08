@@ -1,29 +1,22 @@
 require_relative 'models/month.rb'
-require_relative 'utilities/command_line_utilities.rb'
 require_relative 'models/year.rb'
 require_relative 'models/display.rb'
 require_relative 'models/holiday_list.rb'
+require_relative 'models/console.rb'
 
 @display = Display.new
 @holiday_list = HolidayList.new
+@console = Console.new
 @input = ''
 @year = 0
 
 def prompt_for_year
-  clear_console
-  puts 'Enter a year (four-digit number):'
-  year = gets.chomp
-  if year.to_i < 1000 || year.to_i > 9999
-    puts 'The year must be a four-digit number.'
+  year = @console.prompt_for_input('Enter a year (four-digit number):')
+  if year.to_i < 2000 || year.to_i > 3000
+    puts 'The year must be between 2000 & 3000'
     return prompt_for_year
   end
-  puts 'You entered: ' + year
   year.to_i
-end
-
-def prompt_for_input
-  puts 'Commands: Show full year (Y), Change year (C), View holidays (H), Add holiday (A), Exit (X)'
-  @input = gets.chomp.upcase
 end
 
 def process_input
@@ -38,22 +31,17 @@ def process_input
     @year = prompt_for_year
     display_year
   when 'X'
-    puts 'Exiting...'
+    @display.write('Exiting...')
   else
-    puts 'I don\'t know what to do with that'
+    @display.write('Invalid input.')
   end
 end
 
 def add_holiday
-  clear_console
-  print 'Which holiday would you like to add? '
-  name = gets.chomp
-  puts ''
-  print 'What date does the holiday fall on? (mm-dd format) '
-  date = gets.chomp
+  name = @console.prompt_for_input('Which holiday would you like to add? ')
+  date = @console.prompt_for_input('What date does the holiday fall on? (mm-dd format) ')
   @holiday_list.add_holiday(name, date)
   @holiday_list.sort
-  clear_console
   @display.render_holidays(@holiday_list)
 end
 
@@ -62,20 +50,18 @@ def display_year
 end
 
 def display_holidays
-  clear_console
   @display.render_holidays(@holiday_list)
 end
 
 def app_loop
   until @input == 'X'
     @display.new_line
-    prompt_for_input
+    @input = @console.prompt_for_input('Commands: Show full year (Y), Change year (C), View holidays (H), Add holiday (A), Exit (X)').upcase
     process_input
   end
 end
 
 def main
-  clear_console
   @year = prompt_for_year
   display_year
   app_loop

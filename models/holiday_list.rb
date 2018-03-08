@@ -6,7 +6,6 @@ class HolidayList
   def initialize(year)
     @holidays = []
     raise ArgumentError, 'Year parameter must be of type Year, got ' + year.class unless year.class == Year
-
     # Thanksgiving: 2nd Monday of October
     october = year.months[9]
     tday = october.nth_weekday_of_month(2, 1)
@@ -25,6 +24,7 @@ class HolidayList
 
   def add_holiday(name, date)
     @holidays << Holiday.new(name, date)
+    sort
   end
 end
 

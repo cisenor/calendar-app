@@ -9,8 +9,8 @@ class HolidayList
     @year = year
     add_holiday_based_on_week('Easter', 3, 1, 1)
     add_holiday_based_on_week('Thanksgiving', 9, 2, 1)
-    add_holiday('Remembrance Day', '11-11')
-    add_holiday('Christmas Day', '12-25')
+    add_holiday('Remembrance Day', Date.new(@year.year, 11, 11))
+    add_holiday('Christmas Day', Date.new(@year.year, 12, 25))
   end
 
   # Creates a holiday based on the nth weekday of the month.
@@ -20,7 +20,7 @@ class HolidayList
   def add_holiday_based_on_week(name, month, nth, weekday)
     selected_month = @year.months[month]
     day = selected_month.nth_weekday_of_month(nth, weekday)
-    add_holiday(name, (month + 1).to_s + '-' + day.to_s)
+    add_holiday(name, Date.new(@year.year, month + 1, day))
   end
 
   def sort
@@ -33,11 +33,7 @@ class HolidayList
   end
 
   def add_holiday(name, date)
-    m, d = date.scan(/\d{1,2}/)
-    raise ArgumentError if m.nil? || d.nil?
-    month = @year.month(m.to_i - 1)
-    raise ArgumentError unless month.valid_day? d
-
+    raise ArgumentError unless date.class == Date
     # We're good
     @holidays << Holiday.new(name, date)
     sort
@@ -45,18 +41,12 @@ class HolidayList
     puts 'Can\'t create holiday with provided date: ' + date.to_s
   end
 
-  def holiday_by_month_day?(month, day)
-    date_is_holiday?(Date.new(2018, month, day))
-  end
-
-  def holiday?(date)
-    if date.class == Date
-      date_is_holiday? date
-    elsif date.class == String
-      string_is_holiday? date
-    else
-      raise ArgumentError, 'Date must be either a string or a Date object'
-    end
+  def holiday?(month, day)
+    return false if month.nil? || day.nil?
+    date_is_holiday?(Date.new(@year.year, month, day))
+  rescue ArgumentError => ex
+    return false if ex.message =~ /invalid date/
+    raise ex
   end
 
   def date_is_holiday?(date)
@@ -76,8 +66,8 @@ class Holiday
   attr_reader :date
   def initialize(name, date)
     @name = name
-    @date = Date.strptime(date, '%m-%d')
-    raise ArgumentError, 'Couldn\'t parse a date from ' + date.to_s if @date.nil?
+    raise ArgumentError unless date.class == Date
+    @date = date
   end
 
   def to_s

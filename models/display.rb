@@ -13,8 +13,8 @@ class Display
     ' '
   end
 
-  def justify(string, total)
-    string.to_s.center total
+  def justify(value, total)
+    value.to_s.center total
   end
 
   def render_year(year, holiday_list)
@@ -34,7 +34,7 @@ class Display
       end
       puts display_str
       display_weekdays
-      display_days these_months, holiday_list
+      display_days(these_months, holiday_list)
       puts Display.vertical_separator * 86
     end
   end
@@ -63,10 +63,10 @@ class Display
     end
   end
 
-  def bold_if_holiday(string, month, day, holiday_list)
-    return string if day.nil?
-    return bold(string) if holiday_list.holiday_by_month_day?(month, day)
-    string
+  def bold_if_holiday(value, month, day, holiday_list)
+    return value if day.nil?
+    value = bold(value) if holiday_list.holiday?(month, day)
+    value
   end
 
   def display_weekdays
@@ -100,8 +100,8 @@ class Display
     puts ''
   end
 
-  def bold(string)
-    "\e[1m#{string}\e[0m"
+  def bold(value)
+    "\e[1m#{value}\e[0m"
   end
 
   def write(input)

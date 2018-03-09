@@ -67,8 +67,7 @@ class Display
 
   def display_months(months, holiday_list)
     until months.empty?
-      these_months = months[0, 4]
-      months = months[4, 12]
+      these_months = months.shift(4)
       puts these_months.map { |month| justify(month.name, 22) }.join
       display_weekdays
       display_days(these_months, holiday_list)
@@ -77,8 +76,7 @@ class Display
   end
 
   def display_days(months, holiday_list)
-    longest_month = find_longest_month months
-    (0...longest_month).each do |week_num|
+    (0...find_longest_month(months)).each do |week_num|
       puts create_row(week_num, months, holiday_list)
     end
   end
@@ -102,7 +100,7 @@ class TextHighlights
   def initialize
     @highlights = {
       bold: "\e[1m%<value>s\e[0m",
-      leap: "\e[0;32;47m%<value>s\e[0m",
+      leap: "\e[1;32;47m%<value>s\e[0m",
       friday13: "\e[41m%<value>s\e[0m",
       none: '%<value>s'
     }

@@ -17,7 +17,7 @@ class HolidayList
   def add_holiday_based_on_week(name, month, nth, weekday)
     selected_month = @year.months[month]
     day = selected_month.nth_weekday_of_month(nth, weekday)
-    add_holiday(name, Date.new(@year.year, month + 1, day))
+    add_holiday(name, day)
   end
 
   # Likely a utility for testing.

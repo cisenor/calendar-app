@@ -108,7 +108,7 @@ class Display
         week.map do |day|
           str_val = day.to_s.rjust 2
           next str_val unless day
-          @highlights.highlight(str_val, holiday_list.holiday(Date.new(year.year, month.month, day)))
+          @highlights.highlight(str_val, holiday_list.holiday(day))
         end.join(' ') + Display.horizontal_separator
       end.join
       puts display_str

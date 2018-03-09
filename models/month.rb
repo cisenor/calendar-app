@@ -18,26 +18,6 @@ class Month
     create_weeks
   end
 
-  def create_weeks
-    @weeks = []
-    days = (@start_day..@last_day).to_a
-    @weeks << create_first_week(days)
-    until days.empty?
-      week = []
-      7.times do
-        week << days.shift
-      end
-      @weeks << week
-    end
-  end
-
-  def create_first_week(days)
-    week_start = Date.new(@year, @month, days.first).wday
-    (0..6).map do |day|
-      days.shift if day >= week_start
-    end
-  end
-
   def week(week_num)
     @weeks[week_num]
   end
@@ -60,5 +40,26 @@ class Month
   def to_s
     @name
   end
-  private :create_weeks, :create_first_week
+
+  private
+
+  def create_weeks
+    @weeks = []
+    days = (@start_day..@last_day).to_a
+    @weeks << create_first_week(days)
+    until days.empty?
+      week = []
+      7.times do
+        week << days.shift
+      end
+      @weeks << week
+    end
+  end
+
+  def create_first_week(days)
+    week_start = Date.new(@year, @month, days.first).wday
+    (0..6).map do |day|
+      days.shift if day >= week_start
+    end
+  end
 end

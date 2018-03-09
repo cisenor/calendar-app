@@ -17,7 +17,7 @@ class Display
     raise ArgumentError 'Year must be a Year object' if year.class != Year
     puts justify(year.year, 86)
     months = year.months
-    display_months(months, holiday_list)
+    display_months(months, holiday_list, year)
   end
 
   def display_all(year, holiday_list)
@@ -41,13 +41,15 @@ class Display
   def new_line
     puts ''
   end
-
-  def bold(value)
-    "\e[1m#{value}\e[0m"
-  end
-
+  
   def write(input)
     puts input
+  end
+
+  def make_scary_if_friday_13(value, month, day, year)
+    return value unless day == 13
+    value = make_scary(value) if Date.new(year, month, day).wday == 5
+    value
   end
 
   private
@@ -56,6 +58,14 @@ class Display
     return value if day.nil?
     value = bold(value) if holiday_list.holiday?(month, day)
     value
+  end
+
+  def bold(value)
+    "\e[1m#{value}\e[0m"
+  end
+
+  def make_scary(value)
+    "\e[41m#{value}\e[0m"
   end
 
   def justify(value, total)
@@ -76,7 +86,7 @@ class Display
     puts ''
   end
 
-  def display_months(months, holiday_list)
+  def display_months(months, holiday_list, year_object)
     until months.empty?
       these_months = months[0, 4]
       months = months[4, 12]
@@ -86,12 +96,12 @@ class Display
       end
       puts display_str
       display_weekdays
-      display_days(these_months, holiday_list)
+      display_days(these_months, holiday_list, year_object)
       puts Display.vertical_separator * 86
     end
   end
 
-  def display_days(months, holiday_list)
+  def display_days(months, holiday_list, year)
     longest_month = find_longest_month months
     (0...longest_month).each do |week_num|
       display_str = ''
@@ -101,7 +111,8 @@ class Display
         else
           display_values = month.week(week_num).map do |day|
             str_val = day.to_s.rjust 2
-            bold_if_holiday(str_val, month.month, day, holiday_list)
+            str_val = bold_if_holiday(str_val, month.month, day, holiday_list)
+            make_scary_if_friday_13(str_val, month.month, day, year.year)
           end
           display_str += display_values.join(' ') + Display.horizontal_separator
         end

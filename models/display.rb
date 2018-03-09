@@ -47,22 +47,6 @@ class Display
 
   private
 
-  def bold_if_holiday(value, date, holiday_list)
-    value = @highlights.highlight(value, :bold) if holiday_list.holiday?(date)
-    value
-  end
-
-  def make_scary_if_friday_13(value, date)
-    raise ArgumentError if date.class != Date
-    return value unless date.day == 13
-    value = @highlights.highlight(value, :friday13) if date.friday?
-    value
-  end
-
-  def mark_as_leap_day(value)
-    @highlights.highlight(value, :leap)
-  end
-
   def justify(value, total)
     value.to_s.center total
   end

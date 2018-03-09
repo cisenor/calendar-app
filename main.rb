@@ -46,8 +46,9 @@ class App
   def add_holiday
     name = @user_input.prompt_for_input('Which holiday would you like to add? ')
     date = @user_input.prompt_for_input('What date does the holiday fall on? (mm-dd format) ')
-    @holiday_list.add_holiday(name, date)
-    @display.render_holidays(@holiday_list)
+    d = Date.strptime(date, '%m-%d')
+    @holiday_list.add_holiday(name, d)
+    @display.display_all(@year, @holiday_list)
   end
 
   def display_year

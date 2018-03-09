@@ -9,7 +9,7 @@ class Display
   def initialize
     @highlights = TextHighlights.new
     @h_div = '  '
-    @vertical_separator = ' '
+    @v_div = ' '
   end
 
   def render_year(year, holiday_list)
@@ -71,7 +71,7 @@ class Display
       puts these_months.map { |month| justify(month.name, 22) }.join
       display_weekdays
       display_days(these_months, holiday_list)
-      puts @vertical_separator * 86
+      puts @v_div * 86
     end
   end
 

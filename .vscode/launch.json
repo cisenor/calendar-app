@@ -16,7 +16,7 @@
       "type": "Ruby",
       "request": "launch",
       "cwd": "${workspaceRoot}",
-      "program": "${workspaceRoot}/tests/test_all.rb"
+      "program": "${workspaceRoot}/main.rb"
     }
   ]
 }

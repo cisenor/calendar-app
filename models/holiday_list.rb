@@ -34,12 +34,11 @@ class HolidayList
     puts 'Can\'t create holiday with provided date: ' + date.to_s
   end
 
-  def holiday?(month, day)
-    return false if month.nil? || day.nil?
-    date_is_holiday?(Date.new(@year.year, month, day))
-  rescue ArgumentError => ex
-    return false if ex.message =~ /invalid date/
-    raise ex
+  def holiday(date)
+    return :bold if date_is_holiday?(date)
+    return :leap if date.month == 2 && date.day == 29
+    return :friday13 if date.friday? && date.day == 13
+    :none
   end
 
   private

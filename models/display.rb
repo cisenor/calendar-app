@@ -1,5 +1,6 @@
 require_relative './year.rb'
 require_relative './holiday_list.rb'
+require 'date'
 
 # Renders the supplied year class. Each month will be 20
 # chars wide. (2 digits * 7 + spacing between each column)
@@ -11,6 +12,10 @@ class Display
 
   def self.vertical_separator
     ' '
+  end
+
+  def initialize
+    @highlights = TextHighlights.new
   end
 
   def render_year(year, holiday_list)
@@ -46,26 +51,22 @@ class Display
     puts input
   end
 
-  def make_scary_if_friday_13(value, month, day, year)
-    return value unless day == 13
-    value = make_scary(value) if Date.new(year, month, day).wday == 5
-    value
-  end
-
   private
 
-  def bold_if_holiday(value, month, day, holiday_list)
-    return value unless day
-    value = bold(value) if holiday_list.holiday?(month, day)
+  def bold_if_holiday(value, date, holiday_list)
+    value = @highlights.highlight(value, :bold) if holiday_list.holiday?(date)
     value
   end
 
-  def bold(value)
-    "\e[1m#{value}\e[0m"
+  def make_scary_if_friday_13(value, date)
+    raise ArgumentError if date.class != Date
+    return value unless date.day == 13
+    value = @highlights.highlight(value, :friday13) if date.friday?
+    value
   end
 
-  def make_scary(value)
-    "\e[41m#{value}\e[0m"
+  def mark_as_leap_day(value)
+    @highlights.highlight(value, :leap)
   end
 
   def justify(value, total)
@@ -106,11 +107,29 @@ class Display
         next ' ' * 20 + Display.horizontal_separator if week.nil?
         week.map do |day|
           str_val = day.to_s.rjust 2
-          str_val = bold_if_holiday(str_val, month.month, day, holiday_list)
-          make_scary_if_friday_13(str_val, month.month, day, year.year)
+          next str_val unless day
+          @highlights.highlight(str_val, holiday_list.holiday(Date.new(year.year, month.month, day)))
         end.join(' ') + Display.horizontal_separator
       end.join
       puts display_str
     end
+  end
+end
+
+# Handles date highlighting
+class TextHighlights
+  def initialize
+    @highlights = {
+      bold: "\e[1m%<value>s\e[0m",
+      leap: "\e[0;32;47m%<value>s\e[0m",
+      friday13: "\e[41m%<value>s\e[0m",
+      none: '%<value>s'
+    }
+  end
+
+  def highlight(value, key)
+    output = @highlights.fetch(key)
+    return key unless output
+    format output, value: value
   end
 end

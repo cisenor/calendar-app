@@ -67,7 +67,9 @@ class App
   end
 
   def main
-    prompt_for_year
+    # prompt_for_year
+    @year = Year.new(2000)
+    @holiday_list = HolidayList.new(@year)
     display_year
     app_loop
   end

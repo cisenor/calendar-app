@@ -14,17 +14,10 @@ class HolidayList
   end
 
   # Creates a holiday based on the nth weekday of the month.
-  # Params
-  # +name+:: The name of the holiday
-  # +nth+:: The week number (zero-indexed)
   def add_holiday_based_on_week(name, month, nth, weekday)
     selected_month = @year.months[month]
     day = selected_month.nth_weekday_of_month(nth, weekday)
     add_holiday(name, Date.new(@year.year, month + 1, day))
-  end
-
-  def sort
-    @holidays.sort! { |a, b| a.date <=> b.date }
   end
 
   # Likely a utility for testing.
@@ -49,6 +42,12 @@ class HolidayList
     raise ex
   end
 
+  private
+
+  def sort
+    @holidays.sort! { |a, b| a.date <=> b.date }
+  end
+
   def date_is_holiday?(date)
     @holidays.any? { |h| h.date == date }
   end
@@ -56,8 +55,6 @@ class HolidayList
   def string_is_holiday?(date)
     @holidays.any? { |h| h.date.strftime('%m-%d') == date }
   end
-
-  private :date_is_holiday?, :string_is_holiday?
 end
 
 # A single holiday object

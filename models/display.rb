@@ -6,23 +6,17 @@ require 'date'
 # chars wide. (2 digits * 7 + spacing between each column)
 # Header will be 86 characters wide (4 months + 2 chars padding between each)
 class Display
-  def self.horizontal_separator
-    '  '
-  end
-
-  def self.vertical_separator
-    ' '
-  end
-
   def initialize
     @highlights = TextHighlights.new
+    @h_div = '  '
+    @vertical_separator = ' '
   end
 
   def render_year(year, holiday_list)
     raise ArgumentError 'Year must be a Year object' if year.class != Year
     puts justify(year.year, 86)
     months = year.months
-    display_months(months, holiday_list, year)
+    display_months(months, holiday_list)
   end
 
   def display_all(year, holiday_list)
@@ -87,32 +81,35 @@ class Display
     puts ''
   end
 
-  def display_months(months, holiday_list, year_object)
+  def display_months(months, holiday_list)
     until months.empty?
       these_months = months[0, 4]
       months = months[4, 12]
-      display_str = these_months.map { |month| justify(month.name, 22) }.join
-      puts display_str
+      puts these_months.map { |month| justify(month.name, 22) }.join
       display_weekdays
-      display_days(these_months, holiday_list, year_object)
-      puts Display.vertical_separator * 86
+      display_days(these_months, holiday_list)
+      puts @vertical_separator * 86
     end
   end
 
-  def display_days(months, holiday_list, year)
+  def display_days(months, holiday_list)
     longest_month = find_longest_month months
     (0...longest_month).each do |week_num|
-      display_str = months.map do |month|
-        week = month.week(week_num)
-        next ' ' * 20 + Display.horizontal_separator if week.nil?
-        week.map do |day|
-          str_val = day.to_s.rjust 2
-          next str_val unless day
-          @highlights.highlight(str_val, holiday_list.holiday(day))
-        end.join(' ') + Display.horizontal_separator
-      end.join
-      puts display_str
+      puts create_row(week_num, months, holiday_list)
     end
+  end
+
+  def create_row(week_num, months, holiday_list)
+    months.map do |month|
+      week = month.week(week_num)
+      next ' ' * 20 + @h_div if week.nil?
+      week.map { |day| create_day_entry(day, holiday_list) }.join(' ') + @h_div
+    end.join
+  end
+
+  def create_day_entry(day, holiday_list)
+    return '  ' unless day
+    @highlights.highlight(day.day.to_s.rjust(2), holiday_list.holiday(day))
   end
 end
 

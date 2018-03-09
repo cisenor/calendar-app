@@ -15,20 +15,4 @@ class TestDisplay < Test::Unit::TestCase
       @display.bold_if_holiday
     end
   end
-
-  def test_scary
-    @display = Display.new
-    raw = 'test'
-    # Use send to test private methods.
-    dtext = @display.send(:make_scary_if_friday_13, raw, Date.new(2018, 7, 13))
-    assert_equal "\e[41mtest\e[0m", dtext
-  end
-
-  def test_not_scary
-    @display = Display.new
-    raw = 'test'
-    dtext = @display.send(:make_scary_if_friday_13, raw, Date.new(2018, 7, 12))
-    assert_equal 'test', dtext
-  end
-
 end

@@ -13,69 +13,11 @@ class Display
     ' '
   end
 
-  def justify(value, total)
-    value.to_s.center total
-  end
-
   def render_year(year, holiday_list)
     raise ArgumentError 'Year must be a Year object' if year.class != Year
     puts justify(year.year, 86)
     months = year.months
     display_months(months, holiday_list)
-  end
-
-  def display_months(months, holiday_list)
-    until months.empty?
-      these_months = months[0, 4]
-      months = months[4, 12]
-      display_str = ''
-      these_months.each do |month|
-        display_str += justify month.name, 22
-      end
-      puts display_str
-      display_weekdays
-      display_days(these_months, holiday_list)
-      puts Display.vertical_separator * 86
-    end
-  end
-
-  def find_longest_month(months)
-    sorted_months = months.sort { |x, y| y.weeks.length <=> x.weeks.length }
-    sorted_months.first.weeks.length
-  end
-
-  def display_days(months, holiday_list)
-    longest_month = find_longest_month months
-    (0...longest_month).each do |week_num|
-      display_str = ''
-      months.map do |month|
-        if month.week(week_num).nil?
-          display_str += ' ' * 20 + Display.horizontal_separator
-        else
-          display_values = month.week(week_num).map do |day|
-            str_val = day.to_s.rjust 2
-            bold_if_holiday(str_val, month.month, day, holiday_list)
-          end
-          display_str += display_values.join(' ') + Display.horizontal_separator
-        end
-      end
-      puts display_str
-    end
-  end
-
-  def bold_if_holiday(value, month, day, holiday_list)
-    return value if day.nil?
-    value = bold(value) if holiday_list.holiday?(month, day)
-    value
-  end
-
-  def display_weekdays
-    wkdy_str = ''
-    4.times do
-      wkdy_str += 'Su Mo Tu We Th Fr Sa  '
-    end
-    print wkdy_str.rstrip
-    puts ''
   end
 
   def display_all(year, holiday_list)
@@ -108,5 +50,64 @@ class Display
     puts input
   end
 
-  private :find_longest_month, :justify, :display_weekdays, :display_months, :bold_if_holiday
+  private
+
+  def bold_if_holiday(value, month, day, holiday_list)
+    return value if day.nil?
+    value = bold(value) if holiday_list.holiday?(month, day)
+    value
+  end
+
+  def justify(value, total)
+    value.to_s.center total
+  end
+
+  def find_longest_month(months)
+    sorted_months = months.sort { |x, y| y.weeks.length <=> x.weeks.length }
+    sorted_months.first.weeks.length
+  end
+
+  def display_weekdays
+    wkdy_str = ''
+    4.times do
+      wkdy_str += 'Su Mo Tu We Th Fr Sa  '
+    end
+    print wkdy_str.rstrip
+    puts ''
+  end
+
+  def display_months(months, holiday_list)
+    until months.empty?
+      these_months = months[0, 4]
+      months = months[4, 12]
+      display_str = ''
+      these_months.each do |month|
+        display_str += justify month.name, 22
+      end
+      puts display_str
+      display_weekdays
+      display_days(these_months, holiday_list)
+      puts Display.vertical_separator * 86
+    end
+  end
+
+  def display_days(months, holiday_list)
+    longest_month = find_longest_month months
+    (0...longest_month).each do |week_num|
+      display_str = ''
+      months.map do |month|
+        if month.week(week_num).nil?
+          display_str += ' ' * 20 + Display.horizontal_separator
+        else
+          display_values = month.week(week_num).map do |day|
+            str_val = day.to_s.rjust 2
+            bold_if_holiday(str_val, month.month, day, holiday_list)
+          end
+          display_str += display_values.join(' ') + Display.horizontal_separator
+        end
+      end
+      puts display_str
+    end
+  end
+
 end

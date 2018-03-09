@@ -16,11 +16,12 @@ class App
   # Prompt the user for a year, then populate the instance vars year and holiday list with the new values
   def prompt_for_year
     year = @user_input.prompt_for_input('Enter a year (four-digit number):')
-    if year.to_i < 1970 || year.to_i > 3000
+    year = year.to_i
+    unless year.between?(1970, 3000)
       puts 'The year must be between 1970 & 3000'
       return prompt_for_year
     end
-    @year = Year.new(year.to_i)
+    @year = Year.new(year)
     @holiday_list = HolidayList.new(@year)
   end
 

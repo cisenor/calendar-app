@@ -41,7 +41,7 @@ class Display
   def new_line
     puts ''
   end
-  
+
   def write(input)
     puts input
   end
@@ -55,7 +55,7 @@ class Display
   private
 
   def bold_if_holiday(value, month, day, holiday_list)
-    return value if day.nil?
+    return value unless day
     value = bold(value) if holiday_list.holiday?(month, day)
     value
   end
@@ -90,10 +90,7 @@ class Display
     until months.empty?
       these_months = months[0, 4]
       months = months[4, 12]
-      display_str = ''
-      these_months.each do |month|
-        display_str += justify month.name, 22
-      end
+      display_str = these_months.map { |month| justify(month.name, 22) }.join
       puts display_str
       display_weekdays
       display_days(these_months, holiday_list, year_object)
@@ -104,21 +101,16 @@ class Display
   def display_days(months, holiday_list, year)
     longest_month = find_longest_month months
     (0...longest_month).each do |week_num|
-      display_str = ''
-      months.map do |month|
-        if month.week(week_num).nil?
-          display_str += ' ' * 20 + Display.horizontal_separator
-        else
-          display_values = month.week(week_num).map do |day|
-            str_val = day.to_s.rjust 2
-            str_val = bold_if_holiday(str_val, month.month, day, holiday_list)
-            make_scary_if_friday_13(str_val, month.month, day, year.year)
-          end
-          display_str += display_values.join(' ') + Display.horizontal_separator
-        end
-      end
+      display_str = months.map do |month|
+        week = month.week(week_num)
+        next ' ' * 20 + Display.horizontal_separator if week.nil?
+        week.map do |day|
+          str_val = day.to_s.rjust 2
+          str_val = bold_if_holiday(str_val, month.month, day, holiday_list)
+          make_scary_if_friday_13(str_val, month.month, day, year.year)
+        end.join(' ') + Display.horizontal_separator
+      end.join
       puts display_str
     end
   end
-
 end

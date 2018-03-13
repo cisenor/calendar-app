@@ -1,5 +1,6 @@
 require_relative './year.rb'
 require_relative './holiday_list.rb'
+require_relative './highlights.rb'
 require 'date'
 
 # Renders the supplied year class. Each month will be 20
@@ -7,7 +8,7 @@ require 'date'
 # Header will be 86 characters wide (4 months + 2 chars padding between each)
 class Display
   def initialize
-    @highlights = TextHighlights.new
+    @highlights = ConsoleTextHighlights.new
     @h_div = '  '
     @v_div = ' '
   end
@@ -92,23 +93,5 @@ class Display
   def create_day_entry(day, holiday_list)
     return '  ' unless day
     @highlights.highlight(day.day.to_s.rjust(2), holiday_list.holiday(day))
-  end
-end
-
-# Handles date highlighting
-class TextHighlights
-  def initialize
-    @highlights = {
-      bold: "\e[1m%<value>s\e[0m",
-      leap: "\e[1;32;47m%<value>s\e[0m",
-      friday13: "\e[41m%<value>s\e[0m",
-      none: '%<value>s'
-    }
-  end
-
-  def highlight(value, key)
-    output = @highlights.fetch(key)
-    return key unless output
-    format output, value: value
   end
 end

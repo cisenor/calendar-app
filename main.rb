@@ -3,11 +3,13 @@ require_relative 'models/year.rb'
 require_relative 'models/display.rb'
 require_relative 'models/holiday_list.rb'
 require_relative 'models/console.rb'
+require_relative 'models/highlights'
+require_relative 'models/HTML_display.rb'
 
 # Main app class.
 class App
   def initialize
-    @display = Display.new
+    @display = HTMLDisplay.new('index.html')
     @user_input = Console.new
     @input = ''
     @year = 0
@@ -72,7 +74,7 @@ class App
     @year = Year.new(2000)
     @holiday_list = HolidayList.new(@year)
     display_year
-    app_loop
+    # app_loop
   end
 end
 

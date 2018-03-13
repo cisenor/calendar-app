@@ -1,6 +1,6 @@
-require_relative './year.rb'
-require_relative './holiday_list.rb'
-require_relative './highlights.rb'
+require_relative '../models/year.rb'
+require_relative '../models/holiday_list.rb'
+require_relative '../models/highlights.rb'
 require 'date'
 
 # Renders the supplied year class. Each month will be 20

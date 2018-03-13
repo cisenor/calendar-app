@@ -1,6 +1,6 @@
 require 'date'
-require_relative './year.rb'
-require_relative './holiday_list.rb'
+require_relative '../models/year.rb'
+require_relative '../models/holiday_list.rb'
 
 # Outputs selected year's calendar to an HTML file.
 class HTMLView < ConsoleView

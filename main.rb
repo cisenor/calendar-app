@@ -9,7 +9,7 @@ require_relative 'views/html_view.rb'
 # Main app class.
 class App
   def initialize
-    @display = HTMLView.new 'index.html'
+    @display = ConsoleView.new
     @user_input = Console.new
     @input = ''
     @year = 0
@@ -73,7 +73,7 @@ class App
     name = @user_input.prompt_for_input('Which holiday would you like to add? ')
     date = @user_input.prompt_for_input('What date does the holiday fall on? (mm-dd format) ')
     d = Date.strptime(date, '%m-%d')
-    @important_dates.mark_date(name, d)
+    @important_dates.mark_date(name, d, :holiday)
     @display.print_calendar(@year, @important_dates)
   end
 
@@ -82,7 +82,7 @@ class App
   end
 
   def print_holidays
-    @display.render_holidays(@important_dates)
+    @display.print_holidays(@important_dates)
   end
 
   def app_loop
@@ -99,7 +99,7 @@ class App
     @important_dates = ImportantDateStore.new(@year)
     add_initial_highlights
     print_calendar
-    # app_loop
+    app_loop
   end
 end
 

@@ -31,15 +31,16 @@ class ConsoleView
     end
   end
 
+  def write(input)
+    puts input
+  end
+
   private
 
   def new_line
     puts ''
   end
 
-  def write(input)
-    puts input
-  end
 
   def render_year(year, important_dates)
     raise ArgumentError 'Year must be a Year object' if year.class != Year

@@ -12,7 +12,7 @@ class Console
 
   def prompt_for_action
     puts ''
-    print 'Commands: Show full year (Y), Change year (C), View holidays (H), Add holiday (A), Exit (X): '
+    print 'Commands: Print calendar (P), Change year (C), View holidays (H), Add holiday (A), Exit (X): '
     value = gets.chomp.upcase[0]
     option(value.to_sym)
   end
@@ -20,7 +20,7 @@ class Console
   private
 
   def option(key)
-    options = { Y: :display_year, C: :change_year, H: :display_holidays, A: :add_holiday, X: :exit }
+    options = { P: :print_calendar, C: :change_year, H: :print_holidays, A: :add_holiday, X: :exit }
     options.fetch(key, :nothing)
   end
 end

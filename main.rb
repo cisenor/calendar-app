@@ -29,10 +29,21 @@ class App
   end
 
   def add_initial_highlights
-    @holiday_list.add_holiday_based_on_week('Easter', 3, 1, 1)
-    @holiday_list.add_holiday_based_on_week('Thanksgiving', 9, 2, 1)
-    @holiday_list.add_holiday('Remembrance Day', Date.new(@year.year, 11, 11))
-    @holiday_list.add_holiday('Christmas Day', Date.new(@year.year, 12, 25))
+    @holiday_list.calculate_important_date('Easter', 3, 1, 1, :holiday)
+    @holiday_list.calculate_important_date('Thanksgiving', 9, 2, 1, :holiday)
+    @holiday_list.mark_date('Remembrance Day', Date.new(@year.year, 11, 11), :holiday)
+    @holiday_list.mark_date('Christmas Day', Date.new(@year.year, 12, 25), :holiday)
+    check_for_friday_thirteenth
+  end
+
+  def check_for_friday_thirteenth
+    @year.months.each do |month|
+      month.weeks.each do |week|
+        day = week[5]
+        next if day.nil?
+        @holiday_list.mark_date('Friday the 13th', day, :friday13) if day.day == 13
+      end
+    end
   end
 
   def process_input
@@ -57,7 +68,7 @@ class App
     name = @user_input.prompt_for_input('Which holiday would you like to add? ')
     date = @user_input.prompt_for_input('What date does the holiday fall on? (mm-dd format) ')
     d = Date.strptime(date, '%m-%d')
-    @holiday_list.add_holiday(name, d)
+    @holiday_list.mark_date(name, d)
     @display.print_calendar(@year, @holiday_list)
   end
 

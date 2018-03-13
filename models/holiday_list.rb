@@ -10,29 +10,36 @@ class HolidayList
   end
 
   # Creates a holiday based on the nth weekday of the month.
-  def add_holiday_based_on_week(name, month, nth, weekday)
+  def calculate_important_date(name, month, nth, weekday, type)
     selected_month = @year.months[month]
     day = selected_month.nth_weekday_of_month(nth, weekday)
-    add_holiday(name, day)
+    mark_date(name, day, type)
   end
 
-  def add_holiday(name, date)
+  def mark_date(name, date, type)
     raise ArgumentError unless date.class == Date
     # We're good
-    @holidays << Holiday.new(name, date)
+    @holidays << Holiday.new(name, date, type)
     sort
   rescue StandardError
     puts 'Can\'t create holiday with provided date: ' + date.to_s
   end
 
   def holiday(date)
-    return :bold if date_is_holiday?(date)
-    return :leap if date.month == 2 && date.day == 29
-    return :friday13 if date.friday? && date.day == 13
+    day = get_important_day_by_date date
+    return day.type if day
     :none
+    # return :bold if date_is_holiday?(date)
+    # return :leap if date.month == 2 && date.day == 29
+    # return :friday13 if date.friday? && date.day == 13
+    # :none
   end
 
   private
+
+  def get_important_day_by_date(date)
+    @holidays.find { |d| d.date == date }
+  end
 
   # Likely a utility for testing.
   def clear_holidays
@@ -56,10 +63,12 @@ end
 class Holiday
   attr_reader :name
   attr_reader :date
-  def initialize(name, date)
+  attr_reader :type
+  def initialize(name, date, type)
     @name = name
     raise ArgumentError unless date.class == Date
     @date = date
+    @type = type
   end
 
   def to_s

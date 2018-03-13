@@ -18,10 +18,6 @@ class Month
     create_weeks
   end
 
-  def week(week_num)
-    @weeks[week_num]
-  end
-
   def nth_weekday_of_month(nth, weekday)
     index = 1
     weeks.each do |week|

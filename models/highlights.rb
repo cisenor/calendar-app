@@ -26,7 +26,7 @@ end
 class HTMLTextHighlights < Highlights
   def initialize
     @highlights = {
-      bold: '<span class="bold">%<value>s</span>',
+      holiday: '<span class="bold">%<value>s</span>',
       leap: '<span class="leap-day">%<value>s</span>',
       friday13: '<span class="friday-13">%<value>s</span>',
       none: '<span>%<value>s</span>'

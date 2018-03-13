@@ -5,7 +5,7 @@ class Console
   end
 
   def prompt_for_input(prompt)
-    prompt += ' ' unless prompt.end_with? ' '
+    prompt << ' ' unless prompt.end_with? ' '
     print prompt
     gets.chomp
   end

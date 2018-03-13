@@ -37,7 +37,7 @@ class HTMLView < ConsoleView
   # or an empty span element
   def create_day_entry(day, holiday_list)
     return create_html_element('span', '') unless day
-    @highlights.highlight(day.day, holiday_list.holiday(day))
+    @highlights.highlight(day.day, holiday_list.styling(day))
   end
 
   def week_header

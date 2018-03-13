@@ -25,14 +25,10 @@ class ImportantDateStore
     puts 'Can\'t create holiday with provided date: ' + date.to_s
   end
 
-  def holiday(date)
+  def styling(date)
     day = get_important_day_by_date date
     return day.type if day
     :none
-    # return :bold if date_is_holiday?(date)
-    # return :leap if date.month == 2 && date.day == 29
-    # return :friday13 if date.friday? && date.day == 13
-    # :none
   end
 
   private

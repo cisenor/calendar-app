@@ -5,5 +5,5 @@
     "AllAutocomplete.showCurrentDocument": false,
     "AllAutocomplete.cycleOpenDocumentsOnLaunch": true,
     "editor.mouseWheelScrollSensitivity": 0.5,
-    "ruby.codeCompletion": "rcodetools"
+    "ruby.codeCompletion": "solargraph"
 }

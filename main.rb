@@ -33,6 +33,12 @@ class App
     @important_dates.mark_date('Remembrance Day', Date.new(@year.year, 11, 11), :holiday)
     @important_dates.mark_date('Christmas Day', Date.new(@year.year, 12, 25), :holiday)
     check_for_friday_thirteenth
+    check_for_leap
+  end
+
+  def check_for_leap
+    return unless @year.leap_year?
+    @important_dates.mark_date('Leap Day', Date.new(@year.year, 2, 29), :leap)
   end
 
   def check_for_friday_thirteenth
@@ -89,7 +95,7 @@ class App
 
   def main
     # prompt_for_year
-    @year = Year.new(2011)
+    @year = Year.new(2000)
     @important_dates = ImportantDateStore.new(@year)
     add_initial_highlights
     print_calendar

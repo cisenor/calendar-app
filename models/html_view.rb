@@ -3,25 +3,21 @@ require_relative './year.rb'
 require_relative './holiday_list.rb'
 
 # Outputs selected year's calendar to an HTML file.
-class HTMLDisplay < Display
+class HTMLView < ConsoleView
   def initialize(filename)
     @highlights = HTMLTextHighlights.new
     @filename = 'dist/' + filename
   end
 
-  def create_html_element(type, content, css_class = nil, css_id = nil)
-    css_class = format " class=\"#{css_class}\"" if css_class
-    css_id = format " id=\"#{css_id}\"" if css_id
-    format "<#{type}#{css_class}#{css_id}>#{content}</#{type}>"
-  end
-
-  def render_year(year, holiday_list)
+  def print_calendar(year, holiday_list)
     raise ArgumentError 'Year must be a Year object.' if year.class != Year
     create_new_file
     write create_html_element('div', year.year, 'centered header')
     write create_html_element('div', create_months(year.months, holiday_list), 'container')
     end_file
   end
+
+  private
 
   def create_months(months, holiday_list)
     months.map do |this_month|
@@ -30,6 +26,13 @@ class HTMLDisplay < Display
       month_str << create_weeks(this_month, holiday_list)
       create_html_element('div', month_str, 'month')
     end.join
+  end
+
+  # Create the day element. Either a 1-2 digit number with appropriate highlights
+  # or an empty span element
+  def create_day_entry(day, holiday_list)
+    return create_html_element('span', '') unless day
+    @highlights.highlight(day.day, holiday_list.holiday(day))
   end
 
   def week_header
@@ -51,14 +54,11 @@ class HTMLDisplay < Display
     end.join
   end
 
-  # Create the day element. Either a 1-2 digit number with appropriate highlights
-  # or an empty span element
-  def create_day_entry(day, holiday_list)
-    return create_html_element('span', '') unless day
-    @highlights.highlight(day.day, holiday_list.holiday(day))
+  def create_html_element(type, content, css_class = nil, css_id = nil)
+    css_class = format " class=\"#{css_class}\"" if css_class
+    css_id = format " id=\"#{css_id}\"" if css_id
+    format "<#{type}#{css_class}#{css_id}>#{content}</#{type}>"
   end
-
-  private
 
   def create_new_file
     File.open(@filename, 'w+', 0644) do |file|

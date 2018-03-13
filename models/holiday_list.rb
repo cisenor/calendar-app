@@ -7,10 +7,6 @@ class HolidayList
     @holidays = []
     raise ArgumentError, 'Year parameter must be of type Year, got ' + year.class unless year.class == Year
     @year = year
-    add_holiday_based_on_week('Easter', 3, 1, 1)
-    add_holiday_based_on_week('Thanksgiving', 9, 2, 1)
-    add_holiday('Remembrance Day', Date.new(@year.year, 11, 11))
-    add_holiday('Christmas Day', Date.new(@year.year, 12, 25))
   end
 
   # Creates a holiday based on the nth weekday of the month.
@@ -18,11 +14,6 @@ class HolidayList
     selected_month = @year.months[month]
     day = selected_month.nth_weekday_of_month(nth, weekday)
     add_holiday(name, day)
-  end
-
-  # Likely a utility for testing.
-  def clear_holidays
-    @holidays = []
   end
 
   def add_holiday(name, date)
@@ -42,6 +33,11 @@ class HolidayList
   end
 
   private
+
+  # Likely a utility for testing.
+  def clear_holidays
+    @holidays = []
+  end
 
   def sort
     @holidays.sort! { |a, b| a.date <=> b.date }

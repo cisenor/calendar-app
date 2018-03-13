@@ -6,29 +6,22 @@ require 'date'
 # Renders the supplied year class. Each month will be 20
 # chars wide. (2 digits * 7 + spacing between each column)
 # Header will be 86 characters wide (4 months + 2 chars padding between each)
-class Display
+class ConsoleView
   def initialize
     @highlights = ConsoleTextHighlights.new
     @h_div = '  '
     @v_div = ' '
   end
 
-  def render_year(year, holiday_list)
-    raise ArgumentError 'Year must be a Year object' if year.class != Year
-    puts justify(year.year, 86)
-    months = year.months
-    display_months(months, holiday_list)
-  end
-
-  def display_all(year, holiday_list)
+  def print_calendar(year, holiday_list)
     system 'clear'
     raise ArgumentError, 'Year argument must be of type Year. Got ' + year.class.to_s unless year.class == Year
     render_year(year, holiday_list)
-    render_holidays(holiday_list)
+    print_holidays(holiday_list)
   end
 
   # Render all holidays as name - date
-  def render_holidays(holiday_list)
+  def print_holidays(holiday_list)
     raise ArgumentError if holiday_list.class != HolidayList
     holidays = holiday_list.holidays
     puts ''
@@ -38,6 +31,8 @@ class Display
     end
   end
 
+  private
+
   def new_line
     puts ''
   end
@@ -46,7 +41,12 @@ class Display
     puts input
   end
 
-  private
+  def render_year(year, holiday_list)
+    raise ArgumentError 'Year must be a Year object' if year.class != Year
+    puts justify(year.year, 86)
+    months = year.months
+    display_months(months, holiday_list)
+  end
 
   def justify(value, total)
     value.to_s.center total

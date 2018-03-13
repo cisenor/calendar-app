@@ -1,15 +1,15 @@
 require_relative 'models/month.rb'
 require_relative 'models/year.rb'
-require_relative 'models/display.rb'
+require_relative 'models/console_view.rb'
 require_relative 'models/holiday_list.rb'
 require_relative 'models/console.rb'
 require_relative 'models/highlights'
-require_relative 'models/HTML_display.rb'
+require_relative 'models/html_view.rb'
 
 # Main app class.
 class App
   def initialize
-    @display = HTMLDisplay.new('index.html')
+    @display = HTMLView.new('index.html')
     @user_input = Console.new
     @input = ''
     @year = 0
@@ -25,6 +25,14 @@ class App
     end
     @year = Year.new(year)
     @holiday_list = HolidayList.new(@year)
+    add_initial_highlights
+  end
+
+  def add_initial_highlights
+    @holiday_list.add_holiday_based_on_week('Easter', 3, 1, 1)
+    @holiday_list.add_holiday_based_on_week('Thanksgiving', 9, 2, 1)
+    @holiday_list.add_holiday('Remembrance Day', Date.new(@year.year, 11, 11))
+    @holiday_list.add_holiday('Christmas Day', Date.new(@year.year, 12, 25))
   end
 
   def process_input
@@ -50,11 +58,11 @@ class App
     date = @user_input.prompt_for_input('What date does the holiday fall on? (mm-dd format) ')
     d = Date.strptime(date, '%m-%d')
     @holiday_list.add_holiday(name, d)
-    @display.display_all(@year, @holiday_list)
+    @display.print_calendar(@year, @holiday_list)
   end
 
   def display_year
-    @display.display_all(@year, @holiday_list)
+    @display.print_calendar(@year, @holiday_list)
   end
 
   def display_holidays
@@ -71,8 +79,9 @@ class App
 
   def main
     # prompt_for_year
-    @year = Year.new(2018)
+    @year = Year.new(2011)
     @holiday_list = HolidayList.new(@year)
+    add_initial_highlights
     display_year
     # app_loop
   end

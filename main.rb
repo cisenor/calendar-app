@@ -15,6 +15,25 @@ class App
     @year = 0
   end
 
+  def main
+    # prompt_for_year
+    @year = Year.new(2000)
+    @calendar_entries = CalendarEntryStore.new(@year)
+    add_initial_markup
+    print_calendar
+    app_loop
+  end
+
+  private
+
+  def app_loop
+    loop do
+      @input = @user_input.prompt_for_action
+      process_input
+      break if @input == :exit
+    end
+  end
+
   # Prompt the user for a year, then populate the instance vars year and holiday list with the new values
   def prompt_for_year
     year = @user_input.prompt_for_input('Enter a year (four-digit number):').to_i
@@ -28,10 +47,12 @@ class App
   end
 
   def add_initial_markup
+    rday = Date.new(@year.year, 11, 11)
+    christmas = Date.new(@year.year, 12, 25)
     @calendar_entries.calculate_calendar_date('Easter', 3, 1, 1, :holiday)
     @calendar_entries.calculate_calendar_date('Thanksgiving', 9, 2, 1, :holiday)
-    @calendar_entries.add_calendar_entry('Remembrance Day', Date.new(@year.year, 11, 11), :holiday)
-    @calendar_entries.add_calendar_entry('Christmas Day', Date.new(@year.year, 12, 25), :holiday)
+    @calendar_entries.add_calendar_entry('Remembrance Day', rday, :holiday)
+    @calendar_entries.add_calendar_entry('Christmas Day', christmas, :holiday)
     check_for_friday_thirteenth
     check_for_leap
   end
@@ -53,19 +74,14 @@ class App
 
   def process_input
     case @input
-    when :print_calendar
-      print_calendar
-    when :print_calendar_dates
-      print_calendar_entries
-    when :add_calendar_entry
-      add_calendar_entry
+    when :print_calendar then print_calendar
+    when :print_calendar_dates then print_calendar_entries
+    when :add_calendar_entry then add_calendar_entry
     when :change_year
       prompt_for_year
       print_calendar
-    when :exit
-      @display.write('Exiting...')
-    else
-      @display.write('Invalid input.')
+    when :exit then @display.write 'Exiting...'
+    else @display.write 'Invalid input.'
     end
   end
 
@@ -83,23 +99,6 @@ class App
 
   def print_calendar_entries
     @display.print_calendar_entries(@calendar_entries)
-  end
-
-  def app_loop
-    loop do
-      @input = @user_input.prompt_for_action
-      process_input
-      break if @input == :exit
-    end
-  end
-
-  def main
-    # prompt_for_year
-    @year = Year.new(2000)
-    @calendar_entries = CalendarEntryStore.new(@year)
-    add_initial_markup
-    print_calendar
-    app_loop
   end
 end
 

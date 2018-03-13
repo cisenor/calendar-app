@@ -7,7 +7,6 @@ class HTMLDisplay < Display
   def initialize(filename)
     @highlights = HTMLTextHighlights.new
     @filename = 'dist/' + filename
-    File.delete @filename if File.file? @filename
   end
 
   def create_html_element(type, content, css_class = nil, css_id = nil)
@@ -61,7 +60,7 @@ class HTMLDisplay < Display
   private
 
   def create_new_file
-    File.open(@filename, 'w', 0644) do |file|
+    File.open(@filename, 'w+', 0644) do |file|
       file.puts '<html><head>'
       file.puts '<link rel="stylesheet" type="text/css" href="styles.css">'
       file.puts '</head><body>'

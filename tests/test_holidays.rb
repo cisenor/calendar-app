@@ -16,16 +16,16 @@ class TestHolidays < Test::Unit::TestCase
 
   def test_add_holiday_based_on_week
     calendar_entries = CalendarEntryStore.new(Year.new(2018))
-    calendar_entries.calculate_important_date('Easter', 3, 1, 1, :holiday)
+    calendar_entries.calculate_calendar_date('Easter', 3, 1, 1, :holiday)
     assert_equal 'Easter - April 2', calendar_entries.dates[0].to_s
 
-    calendar_entries.calculate_important_date('Thanksgiving', 9, 2, 1, :holiday)
+    calendar_entries.calculate_calendar_date('Thanksgiving', 9, 2, 1, :holiday)
     assert_equal 'Thanksgiving - October 8', calendar_entries.dates[1].to_s
   end
 
   def test_is_holiday
     calendar_entries = CalendarEntryStore.new(Year.new(2018))
-    calendar_entries.mark_date('Remembrance Day', Date.new(2018, 11, 11), :holiday)
+    calendar_entries.add_calendar_entry('Remembrance Day', Date.new(2018, 11, 11), :holiday)
     assert_equal :holiday, calendar_entries.styling(Date.new(2018, 11, 11))
   end
 
@@ -36,12 +36,12 @@ class TestHolidays < Test::Unit::TestCase
 
   def test_get_holiday_type
     calendar_entries = CalendarEntryStore.new(Year.new(2000))
-    calendar_entries.calculate_important_date('Easter', 3, 1, 1, :holiday)
-    calendar_entries.calculate_important_date('Thanksgiving', 9, 2, 1, :holiday)
-    calendar_entries.mark_date('Remembrance Day', Date.new(2000, 11, 11), :holiday)
-    calendar_entries.mark_date('Christmas Day', Date.new(2000, 12, 25), :holiday)
-    calendar_entries.mark_date('Leap Day', Date.new(2000, 2, 29), :leap)
-    calendar_entries.mark_date('Friday the 13th', Date.new(2000, 10, 13), :friday13)
+    calendar_entries.calculate_calendar_date('Easter', 3, 1, 1, :holiday)
+    calendar_entries.calculate_calendar_date('Thanksgiving', 9, 2, 1, :holiday)
+    calendar_entries.add_calendar_entry('Remembrance Day', Date.new(2000, 11, 11), :holiday)
+    calendar_entries.add_calendar_entry('Christmas Day', Date.new(2000, 12, 25), :holiday)
+    calendar_entries.add_calendar_entry('Leap Day', Date.new(2000, 2, 29), :leap)
+    calendar_entries.add_calendar_entry('Friday the 13th', Date.new(2000, 10, 13), :friday13)
     assert_equal 'Important Date Store containing 6 entries', calendar_entries.to_s
     assert_equal :leap, calendar_entries.styling(Date.new(2000, 2, 29))
     assert_equal :friday13, calendar_entries.styling(Date.new(2000, 10, 13))

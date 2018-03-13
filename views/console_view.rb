@@ -1,6 +1,6 @@
-require_relative '../models/year.rb'
-require_relative '../models/important_date_store.rb'
-require_relative '../models/highlights.rb'
+require_relative '../models/year'
+require_relative '../models/important_date_store'
+require_relative '../models/markup'
 require 'date'
 
 # Renders the supplied year class. Each month will be 20
@@ -40,7 +40,6 @@ class ConsoleView
   def new_line
     puts ''
   end
-
 
   def render_year(year, important_dates)
     raise ArgumentError 'Year must be a Year object' if year.class != Year

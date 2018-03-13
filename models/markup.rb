@@ -1,4 +1,4 @@
-class Highlights
+class Markup
   def initialize
     raise 'Not Implemented'
   end
@@ -11,7 +11,7 @@ class Highlights
 end
 
 # Handles date highlighting
-class ConsoleTextHighlights < Highlights
+class ConsoleMarkup < Markup
   def initialize
     @highlights = {
       holiday: "\e[1m%<value>s\e[0m",
@@ -23,7 +23,7 @@ class ConsoleTextHighlights < Highlights
 end
 
 # HTML highlighter
-class HTMLTextHighlights < Highlights
+class HTMLMarkup < Markup
   def initialize
     @highlights = {
       holiday: '<span class="bold">%<value>s</span>',

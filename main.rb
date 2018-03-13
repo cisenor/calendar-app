@@ -24,10 +24,10 @@ class App
     end
     @year = Year.new(year)
     @important_dates = ImportantDateStore.new(@year)
-    add_initial_highlights
+    add_initial_markup
   end
 
-  def add_initial_highlights
+  def add_initial_markup
     @important_dates.calculate_important_date('Easter', 3, 1, 1, :holiday)
     @important_dates.calculate_important_date('Thanksgiving', 9, 2, 1, :holiday)
     @important_dates.mark_date('Remembrance Day', Date.new(@year.year, 11, 11), :holiday)

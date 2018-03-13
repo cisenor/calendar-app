@@ -1,10 +1,10 @@
-require_relative 'models/month.rb'
-require_relative 'models/year.rb'
-require_relative 'views/console_view.rb'
-require_relative 'models/important_date_store.rb'
-require_relative 'models/console.rb'
-require_relative 'models/highlights'
-require_relative 'views/html_view.rb'
+require_relative 'models/month'
+require_relative 'models/year'
+require_relative 'views/console_view'
+require_relative 'models/important_date_store'
+require_relative 'models/console'
+require_relative 'models/markup'
+require_relative 'views/html_view'
 
 # Main app class.
 class App

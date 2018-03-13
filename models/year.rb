@@ -11,10 +11,4 @@ class Year
   def leap_year?
     (@year % 4).zero?
   end
-
-  # Returns month at provided index. Index must be zero-based
-  def month(index)
-    raise RangeError, 'Provided index is outside the valid range of months: ' + index.to_s if index < 0 || index > 11
-    @months[index]
-  end
 end

@@ -17,6 +17,7 @@ class HTMLDisplay < Display
 
   def render_year(year, holiday_list)
     raise ArgumentError 'Year must be a Year object.' if year.class != Year
+    create_new_file
     write create_html_element('div', year.year, 'centered header')
     months = year.months
     write '<div class="container">'
@@ -68,7 +69,7 @@ class HTMLDisplay < Display
   end
 
   def write(text)
-    create_new_file unless File.file?(@filename)
+    fail IOError, 'The file has not yet been initialized' unless File.file? @filename
     File.open(@filename, 'a') { |file| file.puts text }
   end
 end

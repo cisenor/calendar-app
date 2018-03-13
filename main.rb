@@ -1,7 +1,7 @@
 require_relative 'models/month.rb'
 require_relative 'models/year.rb'
 require_relative 'views/console_view.rb'
-require_relative 'models/holiday_list.rb'
+require_relative 'models/important_date_store.rb'
 require_relative 'models/console.rb'
 require_relative 'models/highlights'
 require_relative 'views/html_view.rb'
@@ -23,15 +23,15 @@ class App
       return prompt_for_year
     end
     @year = Year.new(year)
-    @holiday_list = HolidayList.new(@year)
+    @important_dates = ImportantDateStore.new(@year)
     add_initial_highlights
   end
 
   def add_initial_highlights
-    @holiday_list.calculate_important_date('Easter', 3, 1, 1, :holiday)
-    @holiday_list.calculate_important_date('Thanksgiving', 9, 2, 1, :holiday)
-    @holiday_list.mark_date('Remembrance Day', Date.new(@year.year, 11, 11), :holiday)
-    @holiday_list.mark_date('Christmas Day', Date.new(@year.year, 12, 25), :holiday)
+    @important_dates.calculate_important_date('Easter', 3, 1, 1, :holiday)
+    @important_dates.calculate_important_date('Thanksgiving', 9, 2, 1, :holiday)
+    @important_dates.mark_date('Remembrance Day', Date.new(@year.year, 11, 11), :holiday)
+    @important_dates.mark_date('Christmas Day', Date.new(@year.year, 12, 25), :holiday)
     check_for_friday_thirteenth
   end
 
@@ -40,7 +40,7 @@ class App
       month.weeks.each do |week|
         day = week[5]
         next if day.nil?
-        @holiday_list.mark_date('Friday the 13th', day, :friday13) if day.day == 13
+        @important_dates.mark_date('Friday the 13th', day, :friday13) if day.day == 13
       end
     end
   end
@@ -67,16 +67,16 @@ class App
     name = @user_input.prompt_for_input('Which holiday would you like to add? ')
     date = @user_input.prompt_for_input('What date does the holiday fall on? (mm-dd format) ')
     d = Date.strptime(date, '%m-%d')
-    @holiday_list.mark_date(name, d)
-    @display.print_calendar(@year, @holiday_list)
+    @important_dates.mark_date(name, d)
+    @display.print_calendar(@year, @important_dates)
   end
 
   def print_calendar
-    @display.print_calendar(@year, @holiday_list)
+    @display.print_calendar(@year, @important_dates)
   end
 
   def print_holidays
-    @display.render_holidays(@holiday_list)
+    @display.render_holidays(@important_dates)
   end
 
   def app_loop
@@ -90,7 +90,7 @@ class App
   def main
     # prompt_for_year
     @year = Year.new(2011)
-    @holiday_list = HolidayList.new(@year)
+    @important_dates = ImportantDateStore.new(@year)
     add_initial_highlights
     print_calendar
     # app_loop

@@ -1,7 +1,7 @@
 require 'date'
 
 # Object that holds all holidays
-class HolidayList
+class ImportantDateStore
   attr_reader :holidays
   def initialize(year)
     @holidays = []
@@ -10,9 +10,9 @@ class HolidayList
   end
 
   # Creates a holiday based on the nth weekday of the month.
-  def calculate_important_date(name, month, nth, weekday, type)
+  def calculate_important_date(name, month, occurrence, weekday, type)
     selected_month = @year.months[month]
-    day = selected_month.nth_weekday_of_month(nth, weekday)
+    day = selected_month.nth_weekday_of_month(occurrence, weekday)
     mark_date(name, day, type)
   end
 

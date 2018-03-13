@@ -1,6 +1,6 @@
 require 'date'
 require_relative '../models/year.rb'
-require_relative '../models/holiday_list.rb'
+require_relative '../models/important_date_store.rb'
 
 ##
 # Outputs provided year's calendar to an HTML file.

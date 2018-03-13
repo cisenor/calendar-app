@@ -12,13 +12,13 @@ class TestMonth < Test::Unit::TestCase
 
   def test_weeks_start_mid_week
     month = Month.new(2018, 3)
-    week = month.week 0
+    week = month.weeks[0]
     assert_equal [nil, nil, nil, nil, Date.new(2018, 3, 1), Date.new(2018, 3, 2), Date.new(2018, 3, 3)], week
   end
 
   def test_weeks_start_sunday
     month = Month.new(2018, 3)
-    week = month.week 1
+    week = month.weeks[1]
     assert_equal [
       Date.new(2018, 3, 4),
       Date.new(2018, 3, 5),

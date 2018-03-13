@@ -1,6 +1,6 @@
 require 'test/unit'
-require_relative '../models/console_view.rb'
-require_relative '../models/html_view.rb'
+require_relative '../views/console_view.rb'
+require_relative '../views/html_view.rb'
 # Class used for testing the month class.
 class TestDisplay < Test::Unit::TestCase
   def test_private_methods

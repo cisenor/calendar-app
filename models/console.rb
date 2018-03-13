@@ -8,7 +8,7 @@ class Console
   end
 
   def prompt_for_action
-    print "\nCommands: Print calendar (P), Change year (C), View holidays (H), Add holiday (A), Exit (X): "
+    print "\nCommands: Print calendar (P), Change year (C), View important dates (V), Add a date (A), Exit (X): "
     value = gets.chomp.upcase[0]
     option(value.to_sym)
   end
@@ -16,7 +16,7 @@ class Console
   private
 
   def option(key)
-    options = { P: :print_calendar, C: :change_year, H: :print_holidays, A: :add_holiday, X: :exit }
+    options = { P: :print_calendar, C: :change_year, V: :print_calendar_dates, A: :add_calendar_entry, X: :exit }
     options.fetch(key, :nothing)
   end
 end

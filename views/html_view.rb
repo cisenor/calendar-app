@@ -1,7 +1,7 @@
 require 'date'
 require_relative '../models/year.rb'
 require_relative './console_view'
-require_relative '../models/important_date_store.rb'
+require_relative '../models/calendar_entry_store.rb'
 
 ##
 # Outputs provided year's calendar to an HTML file.
@@ -15,12 +15,12 @@ class HTMLView < ConsoleView
 
   ##
   # Prints the calendar to the HTML file.
-  def print_calendar(year, important_date_store)
+  def print_calendar(year, calendar_entry_store)
     raise ArgumentError 'Year must be a Year object.' if year.class != Year
     create_new_file
     write create_html_element('div', year.year, 'centered header')
-    write create_html_element('div', create_months(year.months, important_date_store), 'container')
-    print_holidays important_date_store
+    write create_html_element('div', create_months(year.months, calendar_entry_store), 'container')
+    print_calendar_entries calendar_entry_store
     end_file
   end
 
@@ -33,9 +33,9 @@ class HTMLView < ConsoleView
 
   ##
   # Render all holidays as name - date
-  def print_holidays(important_dates)
-    raise ArgumentError if important_dates.class != ImportantDateStore
-    days = important_dates.holidays.map(&:to_s)
+  def print_calendar_entries(calendar_entries)
+    raise ArgumentError if calendar_entries.class != CalendarEntryStore
+    days = calendar_entries.dates.map(&:to_s)
     write create_html_element('div', 'Important Dates', 'header centered')
     write create_list(days)
   end

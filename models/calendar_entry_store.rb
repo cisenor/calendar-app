@@ -1,62 +1,57 @@
 require 'date'
 
-# Object that holds all holidays
-class ImportantDateStore
-  attr_reader :holidays
+# Object that holds all dates
+class CalendarEntryStore
+  attr_reader :dates
   def initialize(year)
-    @holidays = []
+    @dates = []
     raise ArgumentError, 'Year parameter must be of type Year, got ' + year.class unless year.class == Year
     @year = year
   end
 
   # Creates a holiday based on the nth weekday of the month.
-  def calculate_important_date(name, month, occurrence, weekday, type)
+  def calculate_calendar_date(name, month, occurrence, weekday, type)
     selected_month = @year.months[month]
     day = selected_month.nth_weekday_of_month(occurrence, weekday)
-    mark_date(name, day, type)
+    add_calendar_entry(name, day, type)
   end
 
-  def mark_date(name, date, type)
+  def add_calendar_entry(name, date, type)
     raise ArgumentError unless date.class == Date
     # We're good
-    @holidays << Holiday.new(name, date, type)
+    @dates << CalendarEntry.new(name, date, type)
     sort
   rescue StandardError
     puts 'Can\'t create holiday with provided date: ' + date.to_s
   end
 
   def styling(date)
-    day = get_important_day_by_date date
+    day = get_calendar_entry_by_date date
     return day.type if day
     :none
   end
 
-  private
-
-  def get_important_day_by_date(date)
-    @holidays.find { |d| d.date == date }
+  def to_s
+    "Important Date Store containing #{dates.length} entries"
   end
 
-  # Likely a utility for testing.
-  def clear_holidays
-    @holidays = []
+  private
+
+  def get_calendar_entry_by_date(date)
+    @dates.find { |d| d.date == date }
   end
 
   def sort
-    @holidays.sort! { |a, b| a.date <=> b.date }
+    @dates.sort! { |a, b| a.date <=> b.date }
   end
 
-  def date_is_holiday?(date)
-    @holidays.any? { |h| h.date == date }
-  end
-
-  def string_is_holiday?(date)
-    @holidays.any? { |h| h.date.strftime('%m-%d') == date }
+  def date_has_entry?(date)
+    @dates.any? { |h| h.date == date }
   end
 end
 
 # A single holiday object
-class Holiday
+class CalendarEntry
   attr_reader :name
   attr_reader :date
   attr_reader :type

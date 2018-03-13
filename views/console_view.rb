@@ -1,5 +1,5 @@
 require_relative '../models/year'
-require_relative '../models/important_date_store'
+require_relative '../models/calendar_entry_store'
 require_relative '../models/markup'
 require 'date'
 
@@ -13,21 +13,21 @@ class ConsoleView
     @v_div = ' '
   end
 
-  def print_calendar(year, important_dates)
+  def print_calendar(year, calendar_entries)
     system 'clear'
     raise ArgumentError, 'Year argument must be of type Year. Got ' + year.class.to_s unless year.class == Year
-    render_year(year, important_dates)
-    print_holidays(important_dates)
+    render_year(year, calendar_entries)
+    print_calendar_entries(calendar_entries)
   end
 
   # Render all holidays as name - date
-  def print_holidays(important_dates)
-    raise ArgumentError if important_dates.class != ImportantDateStore
-    holidays = important_dates.holidays
+  def print_calendar_entries(calendar_entries)
+    raise ArgumentError if calendar_entries.class != CalendarEntryStore
+    entries = calendar_entries.holidays
     puts ''
     puts 'Holidays:'
-    holidays.each do |holiday|
-      puts holiday
+    entries.each do |entry|
+      puts entry
     end
   end
 
@@ -41,11 +41,11 @@ class ConsoleView
     puts ''
   end
 
-  def render_year(year, important_dates)
+  def render_year(year, calendar_entries)
     raise ArgumentError 'Year must be a Year object' if year.class != Year
     puts justify(year.year, 86)
     months = year.months
-    display_months(months, important_dates)
+    display_months(months, calendar_entries)
   end
 
   def justify(value, total)
@@ -66,32 +66,32 @@ class ConsoleView
     puts ''
   end
 
-  def display_months(months, important_dates)
+  def display_months(months, calendar_entries)
     until months.empty?
       these_months = months.shift(4)
       puts these_months.map { |month| justify(month.name, 22) }.join
       display_weekdays
-      display_days(these_months, important_dates)
+      display_days(these_months, calendar_entries)
       puts @v_div * 86
     end
   end
 
-  def display_days(months, important_dates)
+  def display_days(months, calendar_entries)
     (0...find_longest_month(months)).each do |week_num|
-      puts create_row(week_num, months, important_dates)
+      puts create_row(week_num, months, calendar_entries)
     end
   end
 
-  def create_row(week_num, months, important_dates)
+  def create_row(week_num, months, calendar_entries)
     months.map do |month|
       week = month.weeks[week_num]
       next ' ' * 20 + @h_div unless week
-      week.map { |day| create_day_entry(day, important_dates) }.join(' ') + @h_div
+      week.map { |day| create_day_entry(day, calendar_entries) }.join(' ') + @h_div
     end.join
   end
 
-  def create_day_entry(day, important_dates)
+  def create_day_entry(day, calendar_entries)
     return '  ' unless day
-    @markup.highlight(day.day.to_s.rjust(2), important_dates.styling(day))
+    @markup.highlight(day.day.to_s.rjust(2), calendar_entries.styling(day))
   end
 end

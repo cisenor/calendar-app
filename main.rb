@@ -1,7 +1,7 @@
 require_relative 'models/month'
 require_relative 'models/year'
 require_relative 'views/console_view'
-require_relative 'models/important_date_store'
+require_relative 'models/calendar_entry_store'
 require_relative 'models/console'
 require_relative 'models/markup'
 require_relative 'views/html_view'
@@ -23,22 +23,22 @@ class App
       return prompt_for_year
     end
     @year = Year.new(year)
-    @important_dates = ImportantDateStore.new(@year)
+    @calendar_entries = CalendarEntryStore.new(@year)
     add_initial_markup
   end
 
   def add_initial_markup
-    @important_dates.calculate_important_date('Easter', 3, 1, 1, :holiday)
-    @important_dates.calculate_important_date('Thanksgiving', 9, 2, 1, :holiday)
-    @important_dates.mark_date('Remembrance Day', Date.new(@year.year, 11, 11), :holiday)
-    @important_dates.mark_date('Christmas Day', Date.new(@year.year, 12, 25), :holiday)
+    @calendar_entries.calculate_calendar_date('Easter', 3, 1, 1, :holiday)
+    @calendar_entries.calculate_calendar_date('Thanksgiving', 9, 2, 1, :holiday)
+    @calendar_entries.add_calendar_entry('Remembrance Day', Date.new(@year.year, 11, 11), :holiday)
+    @calendar_entries.add_calendar_entry('Christmas Day', Date.new(@year.year, 12, 25), :holiday)
     check_for_friday_thirteenth
     check_for_leap
   end
 
   def check_for_leap
     return unless @year.leap_year?
-    @important_dates.mark_date('Leap Day', Date.new(@year.year, 2, 29), :leap)
+    @calendar_entries.add_calendar_entry('Leap Day', Date.new(@year.year, 2, 29), :leap)
   end
 
   def check_for_friday_thirteenth
@@ -46,7 +46,7 @@ class App
       month.weeks.each do |week|
         day = week[5]
         next unless day
-        @important_dates.mark_date('Friday the 13th', day, :friday13) if day.day == 13
+        @calendar_entries.add_calendar_entry('Friday the 13th', day, :friday13) if day.day == 13
       end
     end
   end
@@ -55,10 +55,10 @@ class App
     case @input
     when :print_calendar
       print_calendar
-    when :print_holidays
-      print_holidays
-    when :add_holiday
-      add_holiday
+    when :print_calendar_dates
+      print_calendar_entries
+    when :add_calendar_entry
+      add_calendar_entry
     when :change_year
       prompt_for_year
       print_calendar
@@ -69,20 +69,20 @@ class App
     end
   end
 
-  def add_holiday
+  def add_calendar_entry
     name = @user_input.prompt_for_input('Which holiday would you like to add? ')
     date = @user_input.prompt_for_input('What date does the holiday fall on? (mm-dd format) ')
     d = Date.strptime(date, '%m-%d')
-    @important_dates.mark_date(name, d, :holiday)
-    @display.print_calendar(@year, @important_dates)
+    @calendar_entries.add_calendar_entry(name, d, :holiday)
+    @display.print_calendar(@year, @calendar_entries)
   end
 
   def print_calendar
-    @display.print_calendar(@year, @important_dates)
+    @display.print_calendar(@year, @calendar_entries)
   end
 
-  def print_holidays
-    @display.print_holidays(@important_dates)
+  def print_calendar_entries
+    @display.print_calendar_entries(@calendar_entries)
   end
 
   def app_loop
@@ -96,8 +96,8 @@ class App
   def main
     # prompt_for_year
     @year = Year.new(2000)
-    @important_dates = ImportantDateStore.new(@year)
-    add_initial_highlights
+    @calendar_entries = CalendarEntryStore.new(@year)
+    add_initial_markup
     print_calendar
     app_loop
   end

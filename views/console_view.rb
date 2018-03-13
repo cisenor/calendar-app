@@ -8,7 +8,7 @@ require 'date'
 # Header will be 86 characters wide (4 months + 2 chars padding between each)
 class ConsoleView
   def initialize
-    @highlights = ConsoleTextHighlights.new
+    @markup = ConsoleMarkup.new
     @h_div = '  '
     @v_div = ' '
   end
@@ -92,6 +92,6 @@ class ConsoleView
 
   def create_day_entry(day, important_dates)
     return '  ' unless day
-    @highlights.highlight(day.day.to_s.rjust(2), important_dates.styling(day))
+    @markup.highlight(day.day.to_s.rjust(2), important_dates.styling(day))
   end
 end

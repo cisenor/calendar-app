@@ -9,7 +9,7 @@ require_relative 'views/html_view.rb'
 # Main app class.
 class App
   def initialize
-    @display = ConsoleView.new
+    @display = HTMLView.new 'index.html'
     @user_input = Console.new
     @input = ''
     @year = 0

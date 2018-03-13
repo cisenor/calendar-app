@@ -85,7 +85,7 @@ class ConsoleView
   def create_row(week_num, months, holiday_list)
     months.map do |month|
       week = month.week(week_num)
-      next ' ' * 20 + @h_div if week.nil?
+      next ' ' * 20 + @h_div unless week
       week.map { |day| create_day_entry(day, holiday_list) }.join(' ') + @h_div
     end.join
   end

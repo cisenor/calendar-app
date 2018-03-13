@@ -45,7 +45,7 @@ class App
     @year.months.each do |month|
       month.weeks.each do |week|
         day = week[5]
-        next if day.nil?
+        next unless day
         @important_dates.mark_date('Friday the 13th', day, :friday13) if day.day == 13
       end
     end

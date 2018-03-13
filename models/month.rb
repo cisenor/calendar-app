@@ -21,7 +21,7 @@ class Month
   def nth_weekday_of_month(nth, weekday)
     index = 1
     weeks.each do |week|
-      next if week[weekday].nil?
+      next unless week[weekday]
       return week[weekday] if index == nth
       index += 1
     end

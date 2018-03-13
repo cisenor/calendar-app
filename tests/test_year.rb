@@ -13,9 +13,9 @@ class TestYear < Test::Unit::TestCase
   def test_leap_year
     no_leap = Year.new(2001)
     leap = Year.new(2000)
-    assert_equal false, no_leap.is_leap
+    assert_equal false, no_leap.leap_year?
     assert_equal 28, no_leap.months[1].last_day
-    assert_equal true, leap.is_leap
+    assert_equal true, leap.leap_year?
     assert_equal 29, leap.months[1].last_day
   end
 end

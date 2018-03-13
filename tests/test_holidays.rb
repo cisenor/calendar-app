@@ -3,7 +3,6 @@ require_relative '../models/important_date_store.rb'
 
 # Class used for testing the month class.
 class TestHolidays < Test::Unit::TestCase
-
   def test_holiday_throws_on_improper_formatted_date
     assert_raise(ArgumentError) do
       Holiday.new('Christmas', 'asd')
@@ -41,6 +40,8 @@ class TestHolidays < Test::Unit::TestCase
     important_dates.calculate_important_date('Thanksgiving', 9, 2, 1, :holiday)
     important_dates.mark_date('Remembrance Day', Date.new(2000, 11, 11), :holiday)
     important_dates.mark_date('Christmas Day', Date.new(2000, 12, 25), :holiday)
+    important_dates.mark_date('Leap Day', Date.new(2000, 2, 29), :leap)
+    important_dates.mark_date('Friday the 13th', Date.new(2000, 10, 13), :friday13)
     assert_equal :leap, important_dates.styling(Date.new(2000, 2, 29))
     assert_equal :friday13, important_dates.styling(Date.new(2000, 10, 13))
     assert_equal :holiday, important_dates.styling(Date.new(2000, 12, 25))

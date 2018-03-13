@@ -9,7 +9,7 @@ require_relative 'views/html_view.rb'
 # Main app class.
 class App
   def initialize
-    @display = HTMLView.new('index.html')
+    @display = HTMLView.new 'index.html'
     @user_input = Console.new
     @input = ''
     @year = 0
@@ -37,15 +37,15 @@ class App
 
   def process_input
     case @input
-    when :display_year
-      display_year
-    when :display_holidays
-      display_holidays
+    when :print_calendar
+      print_calendar
+    when :print_holidays
+      print_holidays
     when :add_holiday
       add_holiday
     when :change_year
       prompt_for_year
-      display_year
+      print_calendar
     when :exit
       @display.write('Exiting...')
     else
@@ -61,11 +61,11 @@ class App
     @display.print_calendar(@year, @holiday_list)
   end
 
-  def display_year
+  def print_calendar
     @display.print_calendar(@year, @holiday_list)
   end
 
-  def display_holidays
+  def print_holidays
     @display.render_holidays(@holiday_list)
   end
 
@@ -82,7 +82,7 @@ class App
     @year = Year.new(2011)
     @holiday_list = HolidayList.new(@year)
     add_initial_highlights
-    display_year
+    print_calendar
     # app_loop
   end
 end

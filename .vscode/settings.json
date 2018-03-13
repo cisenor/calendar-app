@@ -4,5 +4,6 @@
     "editor.insertSpaces": true,
     "AllAutocomplete.showCurrentDocument": false,
     "AllAutocomplete.cycleOpenDocumentsOnLaunch": true,
-    "editor.mouseWheelScrollSensitivity": 0.5
+    "editor.mouseWheelScrollSensitivity": 0.5,
+    "ruby.codeCompletion": "rcodetools"
 }

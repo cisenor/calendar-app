@@ -2,13 +2,18 @@ require 'date'
 require_relative '../models/year.rb'
 require_relative '../models/holiday_list.rb'
 
-# Outputs selected year's calendar to an HTML file.
+##
+# Outputs provided year's calendar to an HTML file.
 class HTMLView < ConsoleView
+  ##
+  # +filename+ Name of the output file, located in the dist folder.
   def initialize(filename)
     @highlights = HTMLTextHighlights.new
     @filename = 'dist/' + filename
   end
 
+  ##
+  # Prints the calendar to an HTML file.
   def print_calendar(year, holiday_list)
     raise ArgumentError 'Year must be a Year object.' if year.class != Year
     create_new_file

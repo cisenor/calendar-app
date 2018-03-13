@@ -42,7 +42,7 @@ class TestHolidays < Test::Unit::TestCase
     calendar_entries.add_calendar_entry('Christmas Day', Date.new(2000, 12, 25), :holiday)
     calendar_entries.add_calendar_entry('Leap Day', Date.new(2000, 2, 29), :leap)
     calendar_entries.add_calendar_entry('Friday the 13th', Date.new(2000, 10, 13), :friday13)
-    assert_equal 'Important Date Store containing 6 entries', calendar_entries.to_s
+    assert_equal 'Calendar Entry Store containing 6 entries', calendar_entries.to_s
     assert_equal :leap, calendar_entries.styling(Date.new(2000, 2, 29))
     assert_equal :friday13, calendar_entries.styling(Date.new(2000, 10, 13))
     assert_equal :holiday, calendar_entries.styling(Date.new(2000, 12, 25))

@@ -32,7 +32,7 @@ class CalendarEntryStore
   end
 
   def to_s
-    "Important Date Store containing #{dates.length} entries"
+    "Calendar Entry Store containing #{dates.length} entries"
   end
 
   private
@@ -50,7 +50,7 @@ class CalendarEntryStore
   end
 end
 
-# A single holiday object
+# A single entry object
 class CalendarEntry
   attr_reader :name
   attr_reader :date

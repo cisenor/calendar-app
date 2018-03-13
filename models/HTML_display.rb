@@ -19,43 +19,43 @@ class HTMLDisplay < Display
     raise ArgumentError 'Year must be a Year object.' if year.class != Year
     create_new_file
     write create_html_element('div', year.year, 'centered header')
-    months = year.months
-    write '<div class="container">'
-    display_months(months, holiday_list)
-    write '</div></body></html>'
+    write create_html_element('div', create_months(year.months, holiday_list), 'container')
+    end_file
   end
 
-  def display_months(months, holiday_list)
-    until months.empty?
-      this_month = months.shift
-      write '<div class="month">'
-      write create_html_element('div', this_month.name, 'month-name')
-      week_header
-      write_rows(this_month, holiday_list)
-      write '</div>'
-    end
+  def create_months(months, holiday_list)
+    months.map do |this_month|
+      month_str = create_html_element('div', this_month.name, 'month-name')
+      month_str << week_header if week_header
+      month_str << create_weeks(this_month, holiday_list)
+      create_html_element('div', month_str, 'month')
+    end.join
   end
 
   def week_header
     weekdays = %w[Su Mo Tu We Th Fr Sa]
-    write '<div class="week-header">'
-    write weekdays.map { |day| create_html_element('span', day) }.join
-    write '</div>'
+    header_str = weekdays.map { |day| create_html_element('span', day) }.join
+    create_html_element('div', header_str, 'week-header')
   end
 
-  def write_rows(month, holiday_list)
+  def end_file
+    write '</body></html>'
+  end
+
+  def create_weeks(month, holiday_list)
     month.weeks.map do |week|
-      write '<div class="week">'
-      week.each do |day|
+      week_str = week.map do |day|
         create_day_entry(day, holiday_list)
-      end
-      write '</div>'
-    end
+      end.join
+      create_html_element('div', week_str, 'week')
+    end.join
   end
 
+  # Create the day element. Either a 1-2 digit number with appropriate highlights
+  # or an empty span element
   def create_day_entry(day, holiday_list)
-    return write create_html_element('span', '') unless day
-    write @highlights.highlight(day.day, holiday_list.holiday(day))
+    return create_html_element('span', '') unless day
+    @highlights.highlight(day.day, holiday_list.holiday(day))
   end
 
   private

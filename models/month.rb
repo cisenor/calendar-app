@@ -5,7 +5,6 @@ class Month
   attr_reader :year
   attr_reader :name
   attr_reader :last_day
-  attr_reader :start_day
   attr_reader :weeks
   attr_reader :month
   def initialize(year, month)
@@ -18,6 +17,8 @@ class Month
     create_weeks
   end
 
+  ##
+  # Returns the Nth occurrence of the requested weekday or nil if not available
   def nth_weekday_of_month(nth, weekday)
     index = 1
     weeks.each do |week|

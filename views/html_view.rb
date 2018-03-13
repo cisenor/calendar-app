@@ -22,12 +22,17 @@ class HTMLView < ConsoleView
     end_file
   end
 
+  def write(text)
+    fail IOError, 'The file has not yet been initialized' unless File.file? @filename
+    File.open(@filename, 'a') { |file| file.puts text }
+  end
+
   private
 
   def create_months(months, holiday_list)
     months.map do |this_month|
       month_str = create_html_element('div', this_month.name, 'month-name')
-      month_str << week_header if week_header
+      month_str << week_header
       month_str << create_weeks(this_month, holiday_list)
       create_html_element('div', month_str, 'month')
     end.join
@@ -71,10 +76,5 @@ class HTMLView < ConsoleView
       file.puts '<link rel="stylesheet" type="text/css" href="styles.css">'
       file.puts '</head><body>'
     end
-  end
-
-  def write(text)
-    fail IOError, 'The file has not yet been initialized' unless File.file? @filename
-    File.open(@filename, 'a') { |file| file.puts text }
   end
 end

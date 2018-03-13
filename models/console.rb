@@ -14,19 +14,13 @@ class Console
     puts ''
     print 'Commands: Show full year (Y), Change year (C), View holidays (H), Add holiday (A), Exit (X): '
     value = gets.chomp.upcase[0]
-    case value
-    when 'Y'
-      return :display_year
-    when 'C'
-      return :change_year
-    when 'H'
-      return :display_holidays
-    when 'A'
-      return :add_holiday
-    when 'X'
-      return :exit
-    else
-      return :nothing
-    end
+    option(value.to_sym)
+  end
+
+  private
+
+  def option(key)
+    options = { Y: :display_year, C: :change_year, H: :display_holidays, A: :add_holiday, X: :exit }
+    options.fetch(key, :nothing)
   end
 end

@@ -4,7 +4,7 @@ class Highlights
   end
 
   def highlight(value, key)
-    output = @highlights.fetch(key)
+    output = @highlights.fetch(key, :none)
     return value unless output
     format output, value: value
   end
@@ -14,7 +14,7 @@ end
 class ConsoleTextHighlights < Highlights
   def initialize
     @highlights = {
-      bold: "\e[1m%<value>s\e[0m",
+      holiday: "\e[1m%<value>s\e[0m",
       leap: "\e[1;32;47m%<value>s\e[0m",
       friday13: "\e[41m%<value>s\e[0m",
       none: '%<value>s'

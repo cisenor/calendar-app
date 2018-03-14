@@ -23,7 +23,7 @@ class TestDisplay < Test::Unit::TestCase
   end
 
   def test_html_display_with_class
-    test = HTMLMarkup.new.get_markup_block('content','test-class')
+    test = HTMLMarkup.new.get_markup_block('content', 'test-class')
     assumed = '<div class="test-class">content</div>'
     assert_equal assumed, test
   end
@@ -32,5 +32,13 @@ class TestDisplay < Test::Unit::TestCase
     test = HTMLMarkup.new.get_markup_inline('content')
     assumed = '<span>content</span>'
     assert_equal assumed, test
+  end
+
+  def test_console_display
+    m = ConsoleMarkup.new
+    assert_equal "test\n", m.get_markup_block('test')
+    assert_equal 'test', m.get_markup_inline('test')
+    array = %w[test1 test2 test3]
+    assert_equal "test1\ntest2\ntest3\n", m.get_markup_list(array)
   end
 end

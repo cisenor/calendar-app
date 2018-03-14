@@ -21,9 +21,8 @@ class HTMLView < ConsoleView
     raise ArgumentError 'Year must be a Year object.' if year.class != Year
     initialize_new_file
     write @markup.get_markup_block(year.year, 'centered header')
-    months = create_months(year.months)
-    write @markup.get_markup_block(months, 'container')
-    print_calendar_entries
+    write @markup.get_markup_block(create_months(year.months), 'container')
+    write get_calendar_entries
     write @markup.end
   end
 
@@ -42,13 +41,20 @@ class HTMLView < ConsoleView
 
   ##
   # Render all holidays as name - date
-  def print_calendar_entries
-    days = @calendar_entry_store.dates.map(&:to_s)
-    write @markup.get_markup_block('Important Dates', 'header centered')
-    write @markup.get_markup_list(days)
+  def log_calendar_entries(calendar_entries = nil)
+    log get_calendar_entries(calendar_entries)
   end
 
   private
+
+  def get_calendar_entries(calendar_entries)
+    @calendar_entry_store = calendar_entries if calendar_entries
+    raise ArgumentError, 'Calendar entry store is null' unless @calendar_entry_store
+    days = @calendar_entry_store.dates.map(&:to_s)
+    imp_dates = @markup.get_markup_block('Important Dates', 'header centered')
+    imp_dates += @markup.get_markup_list(days)
+    imp_dates
+  end
 
   def create_months(months)
     months.map do |this_month|

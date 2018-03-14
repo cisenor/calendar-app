@@ -9,7 +9,7 @@ require_relative 'views/html_view'
 # Main app class.
 class App
   def initialize
-    @display = HTMLView.new 'index.html'
+    @display = ConsoleView.new  #HTMLView.new 'index.html'
     @user_input = Console.new
     @input = ''
     @year = 0
@@ -97,7 +97,7 @@ class App
   end
 
   def print_calendar_entries
-    @display.print_calendar_entries(@calendar_entries)
+    @display.log_calendar_entries(@calendar_entries)
   end
 end
 

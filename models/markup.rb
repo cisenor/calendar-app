@@ -24,6 +24,26 @@ class ConsoleMarkup < Markup
       none: '%<value>s'
     }
   end
+
+  def get_markup_block(content, _class = nil)
+    content + "\n"
+  end
+
+  def get_markup_inline(content, _class = nil)
+    content
+  end
+
+  def get_markup_list(array, _class = nil)
+    array.map { |item| item.to_s + "\n" }.join
+  end
+
+  def start
+    ''
+  end
+
+  def end
+    ''
+  end
 end
 
 # HTML highlighter

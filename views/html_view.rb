@@ -52,7 +52,7 @@ class HTMLView < ConsoleView
     raise ArgumentError, 'Calendar entry store is null' unless @calendar_entry_store
     days = @calendar_entry_store.dates.map(&:to_s)
     imp_dates = @markup.get_markup_block('Important Dates', 'header centered')
-    imp_dates += @markup.get_markup_list(days)
+    imp_dates << @markup.get_markup_list(days)
     imp_dates
   end
 

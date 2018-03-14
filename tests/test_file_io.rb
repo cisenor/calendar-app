@@ -6,9 +6,12 @@ class TestFileIO < Test::Unit::TestCase
   def test_file_write
     filename = 'testing.html'
     display = HTMLView.new filename
-    display.send(:create_new_file)
-    display.send(:write, 'testing')
-    File.open('dist/' + filename, 'r') { |file| assert_equal "<html><head>\n", file.gets }
+    display.send(:initialize_new_file)
+    display.write('testing')
+    File.open('dist/' + filename, 'r') do |file| 
+      assert_equal "<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\"></head><body>\n", file.gets
+      assert_equal "testing\n", file.gets
+    end
     File.delete('dist/' + filename)
   end
 

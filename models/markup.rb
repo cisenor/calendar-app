@@ -5,6 +5,8 @@ class Markup
     raise 'Not Implemented'
   end
 
+  ##
+  # @return a style symbol to be used by the view for stylized rendering.
   def highlight(value, key)
     output = @highlights.fetch(key, :none)
     return value unless output
@@ -33,5 +35,28 @@ class HTMLMarkup < Markup
       friday13: '<span class="friday-13">%<value>s</span>',
       none: '<span>%<value>s</span>'
     }
+  end
+
+  def get_markup_block(content, type = nil)
+    css_class = " class=\"#{type}\"" if type
+    format "<div#{css_class}>#{content}</div>"
+  end
+
+  def get_markup_inline(content, type = nil)
+    css_class = " class=\"#{type}\"" if type
+    "<span#{css_class}>#{content}</span>"
+  end
+
+  def get_markup_list(array)
+    li = array.map { |item| "<li>#{item}</li>" }.join
+    "<ul>#{li}</ul>"
+  end
+
+  def start
+    '<html><head><link rel="stylesheet" type="text/css" href="styles.css"></head><body>'
+  end
+
+  def end
+    '</body></html>'
   end
 end

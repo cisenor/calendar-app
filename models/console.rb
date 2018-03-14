@@ -9,6 +9,7 @@ class Console
   def prompt_for_action
     print "\nCommands: Print calendar (P), Change year (C), View important dates (V), Add a date (A), Exit (X): "
     value = gets.chomp.upcase[0]
+    return :nothing unless value
     option(value.to_sym)
   end
 

@@ -8,8 +8,8 @@ require_relative '../models/calendar_entry_store.rb'
 class HTMLView < ConsoleView
   ##
   # +filename+ Name of the output file, located in the dist folder.
-  def initialize(filename)
-    @markup = HTMLMarkup.new
+  def initialize(filename, markup_class = HTMLMarkup)
+    @markup = markup_class.new
     @filename = 'dist/' + filename
   end
 
@@ -19,12 +19,12 @@ class HTMLView < ConsoleView
   def print_calendar(year, calendar_entry_store = nil)
     @calendar_entry_store = calendar_entry_store
     raise ArgumentError 'Year must be a Year object.' if year.class != Year
-    create_new_file
-    write create_html_element('div', year.year, 'centered header')
+    initialize_new_file
+    write @markup.get_markup_block(year.year, 'centered header')
     months = create_months(year.months)
-    write create_html_element('div', months, 'container')
+    write @markup.get_markup_block(months, 'container')
     print_calendar_entries
-    end_file
+    write @markup.end
   end
 
   ##
@@ -44,30 +44,25 @@ class HTMLView < ConsoleView
   # Render all holidays as name - date
   def print_calendar_entries
     days = @calendar_entry_store.dates.map(&:to_s)
-    write create_html_element('div', 'Important Dates', 'header centered')
-    write create_list(days)
+    write @markup.get_markup_block('Important Dates', 'header centered')
+    write @markup.get_markup_list(days)
   end
 
   private
 
-  def create_list(array, css_class = nil)
-    li = array.map { |item| create_html_element('li', item) }.join
-    create_html_element('ul', li, css_class)
-  end
-
   def create_months(months)
     months.map do |this_month|
-      month_str = create_html_element('div', this_month.name, 'month-name')
+      month_str = @markup.get_markup_block(this_month.name, 'month-name')
       month_str << week_header
       month_str << create_weeks(this_month)
-      create_html_element('div', month_str, 'month')
+      @markup.get_markup_block(month_str, 'month')
     end.join
   end
 
   # Create the day element. Either a 1-2 digit number with appropriate markup
   # or an empty span element
   def create_day_entry(day)
-    return create_html_element('span', '') unless day
+    return @markup.get_markup_inline(' ') unless day
     markup = :none
     markup = @calendar_entry_store.styling(day) if @calendar_entry_store
     @markup.highlight(day.day, markup)
@@ -75,12 +70,8 @@ class HTMLView < ConsoleView
 
   def week_header
     weekdays = %w[Su Mo Tu We Th Fr Sa]
-    header_str = weekdays.map { |day| create_html_element('span', day) }.join
-    create_html_element('div', header_str, 'week-header')
-  end
-
-  def end_file
-    write '</body></html>'
+    header_str = weekdays.map { |day| @markup.get_markup_inline(day) }.join
+    @markup.get_markup_block(header_str, 'week-header')
   end
 
   def create_weeks(month)
@@ -88,21 +79,13 @@ class HTMLView < ConsoleView
       week_str = (0..6).map do |day|
         create_day_entry(week[day])
       end.join
-      create_html_element('div', week_str, 'week')
+      @markup.get_markup_block(week_str, 'week')
     end.join
   end
 
-  def create_html_element(type, content, css_class = nil, css_id = nil)
-    css_class = format " class=\"#{css_class}\"" if css_class
-    css_id = format " id=\"#{css_id}\"" if css_id
-    format "<#{type}#{css_class}#{css_id}>#{content}</#{type}>"
-  end
-
-  def create_new_file
+  def initialize_new_file
     File.open(@filename, 'w+', 0o644) do |file|
-      file.puts '<html><head>'
-      file.puts '<link rel="stylesheet" type="text/css" href="styles.css">'
-      file.puts '</head><body>'
+      file.puts @markup.start
     end
   end
 end

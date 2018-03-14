@@ -17,22 +17,19 @@ class TestDisplay < Test::Unit::TestCase
   end
 
   def test_html_display_with_id_and_class
-    display = HTMLView.new('filename')
-    test = display.send(:create_html_element, 'div', 'content', 'test-class', 'test-id')
-    assumed = '<div class="test-class" id="test-id">content</div>'
+    test = HTMLMarkup.new.get_markup_block('content', 'test-class')
+    assumed = '<div class="test-class">content</div>'
     assert_equal assumed, test
   end
 
-  def test_html_display_with_id
-    display = HTMLView.new('filename')
-    test = display.send(:create_html_element, 'div', 'content', nil, 'test-id')
-    assumed = '<div id="test-id">content</div>'
+  def test_html_display_with_class
+    test = HTMLMarkup.new.get_markup_block('content','test-class')
+    assumed = '<div class="test-class">content</div>'
     assert_equal assumed, test
   end
 
   def test_html_display_plain_span
-    display = HTMLView.new('filename')
-    test = display.send(:create_html_element, 'span', 'content')
+    test = HTMLMarkup.new.get_markup_inline('content')
     assumed = '<span>content</span>'
     assert_equal assumed, test
   end

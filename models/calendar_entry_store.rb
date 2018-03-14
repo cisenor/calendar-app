@@ -20,7 +20,6 @@ class CalendarEntryStore
     raise ArgumentError unless date.class == Date
     entry = CalendarEntry.new(name, date, type)
     return if @dates.any? { |d| d == entry }
-    
     # We're good
     @dates << entry
     sort

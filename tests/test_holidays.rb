@@ -10,7 +10,8 @@ class TestHolidays < Test::Unit::TestCase
   end
 
   def test_important_date_takes_date
-    calendar_entry = CalendarEntry.new('Christmas', Date.new(2018, 12, 25), :holiday)
+    christmas = Date.new(2018, 12, 25)
+    calendar_entry = CalendarEntry.new('Christmas', christmas, :holiday)
     assert_equal 'Christmas - December 25', calendar_entry.to_s
   end
 
@@ -19,13 +20,13 @@ class TestHolidays < Test::Unit::TestCase
     calendar_entries.calculate_calendar_date('Thanksgiving', 9, 2, 1, :holiday)
     calendar_entries.calculate_calendar_date('Easter', 3, 1, 1, :holiday)
     assert_equal 'Easter - April 2', calendar_entries.dates[0].to_s
-
     assert_equal 'Thanksgiving - October 8', calendar_entries.dates[1].to_s
   end
 
   def test_is_holiday
     calendar_entries = CalendarEntryStore.new(Year.new(2018))
-    calendar_entries.add_calendar_entry('Remembrance Day', Date.new(2018, 11, 11), :holiday)
+    rday = Date.new(2018, 11, 11)
+    calendar_entries.add_calendar_entry('Remembrance Day', rday, :holiday)
     assert_equal :holiday, calendar_entries.styling(Date.new(2018, 11, 11))
   end
 
@@ -35,10 +36,11 @@ class TestHolidays < Test::Unit::TestCase
   end
 
   def test_holiday_equals
-    date1 = CalendarEntry.new('Christmas', Date.new(2018, 12, 25), :holiday)
+    christmas = Date.new(2018, 12, 25)
+    date1 = CalendarEntry.new('Christmas', christmas, :holiday)
     date2 = CalendarEntry.new('Easter', Date.new(2018, 4, 2), :holiday)
-    date3 = CalendarEntry.new('Christmas', Date.new(2018, 12, 25), :holiday)
-    different_name = CalendarEntry.new('Chrimbo', Date.new(2018, 12, 25), :holiday)
+    date3 = CalendarEntry.new('Christmas', christmas, :holiday)
+    different_name = CalendarEntry.new('Chrimbo', christmas, :holiday)
     assert_not_equal date1, date2
     assert_not_equal date1, different_name
     assert_equal date3, date1

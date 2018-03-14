@@ -16,10 +16,10 @@ class TestHolidays < Test::Unit::TestCase
 
   def test_add_holiday_based_on_week
     calendar_entries = CalendarEntryStore.new(Year.new(2018))
+    calendar_entries.calculate_calendar_date('Thanksgiving', 9, 2, 1, :holiday)
     calendar_entries.calculate_calendar_date('Easter', 3, 1, 1, :holiday)
     assert_equal 'Easter - April 2', calendar_entries.dates[0].to_s
 
-    calendar_entries.calculate_calendar_date('Thanksgiving', 9, 2, 1, :holiday)
     assert_equal 'Thanksgiving - October 8', calendar_entries.dates[1].to_s
   end
 

@@ -1,6 +1,5 @@
 # Any interfacing with the terminal
 class Console
-  
   def prompt_for_input(prompt)
     prompt << ' ' unless prompt.end_with? ' '
     print prompt
@@ -16,7 +15,13 @@ class Console
   private
 
   def option(key)
-    options = { P: :print_calendar, C: :change_year, V: :print_calendar_dates, A: :add_calendar_entry, X: :exit }
+    options = {
+      P: :print_calendar,
+      C: :change_year,
+      V: :print_calendar_dates,
+      A: :add_calendar_entry,
+      X: :exit
+    }
     options.fetch(key, :nothing)
   end
 end

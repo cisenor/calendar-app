@@ -1,11 +1,11 @@
 require 'date'
 
-# Object that holds all dates
+# Object that holds all calendar entry objects
 class CalendarEntryStore
   attr_reader :dates
   def initialize(year)
     @dates = []
-    raise ArgumentError, 'Year parameter must be of type Year, got ' + year.class unless year.class == Year
+    raise ArgumentError, "Year parameter must be of type Year, got #{year.class}" unless year.class == Year
     @year = year
   end
 
@@ -19,14 +19,16 @@ class CalendarEntryStore
   def add_calendar_entry(name, date, type)
     raise ArgumentError unless date.class == Date
     entry = CalendarEntry.new(name, date, type)
-    return if @dates.any? { |d| d == entry }
+    return if @dates.include? entry
     # We're good
     @dates << entry
-    sort
+    @dates.sort!
   rescue StandardError
-    puts 'Can\'t create holiday with provided date: ' + date.to_s
+    puts "Can't create holiday with provided date: #{date}"
   end
 
+  ##
+  # Get the styling key for the provided date
   def styling(date)
     day = get_calendar_entry_by_date date
     return day.type if day
@@ -43,12 +45,8 @@ class CalendarEntryStore
     @dates.find { |d| d.date == date }
   end
 
-  def sort
-    @dates.sort! { |a, b| a.date <=> b.date }
-  end
-
   def date_has_entry?(date)
-    @dates.any? { |h| h.date == date }
+    @dates.include? { |h| h.date == date }
   end
 end
 
@@ -68,7 +66,11 @@ class CalendarEntry
     @date == other.date && @name == other.name
   end
 
+  def <=>(other)
+    @date <=> other.date
+  end
+
   def to_s
-    @name.to_s + ' - ' + @date.strftime('%B %-d')
+    "#{@name} - #{@date.strftime('%B %-d')}"
   end
 end

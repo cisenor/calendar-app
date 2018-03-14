@@ -7,11 +7,13 @@ require_relative 'models/markup'
 require_relative 'views/html_view'
 require_relative 'models/config'
 require_relative 'models/json_parse'
+require 'optparse'
 
 # Main app class.
 class App
-  def initialize
-    @display = ConsoleView.new  #HTMLView.new 'index.html'
+  def initialize(view)
+    @display = ConsoleView.new
+    @display = HTMLView.new 'index.html' if view == :web
     @user_input = Console.new
     @input = ''
     @year = 0
@@ -36,7 +38,9 @@ class App
     end
   end
 
-  # Prompt the user for a year, then populate the instance vars year and holiday list with the new values
+  ##
+  # Prompt the user for a year, then populate the
+  # instance vars year and holiday list with the new values
   def prompt_for_year
     year = @user_input.prompt_for_input('Enter a year (four-digit number):').to_i
     unless year.between?(1970, 3000)
@@ -107,5 +111,11 @@ class App
   end
 end
 
-app = App.new
+view = :web
+OptionParser.new do |opts|
+  opts.on('-C', '--console-only', 'Run in the console only.') do
+    view = :console
+  end
+end.parse!
+app = App.new view
 app.main

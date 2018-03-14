@@ -3,7 +3,6 @@ require_relative '../models/config'
 require_relative '../models/json_parse'
 # Class used for testing the month class.
 class TestDisplay < Test::Unit::TestCase
-
   def test_can_read_config
     config = Config.new(JSONParser)
     config.load_configuration('./config.json')
@@ -23,6 +22,5 @@ class TestDisplay < Test::Unit::TestCase
     assert_equal 3, config.calendar_entries.size
     assert_equal 'Christmas', config.calendar_entries[0].name
     assert_equal 'Easter', config.calendar_entries[1].name
-    assert_equal 'Remembrance Day', config.calendar_entries[2].name
   end
 end

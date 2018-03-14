@@ -1,3 +1,5 @@
+##
+# Base class for adding markup to views.
 class Markup
   def initialize
     raise 'Not Implemented'

@@ -1,5 +1,5 @@
 require 'date'
-
+##
 # Defines a month object
 class Month
   attr_reader :year
@@ -28,6 +28,7 @@ class Month
     nil
   end
 
+  ##
   # Whether the provided day is valid for this month
   def valid_day?(day)
     day.to_i <= @last_day && day.to_i >= 1

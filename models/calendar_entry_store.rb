@@ -1,5 +1,6 @@
 require 'date'
 
+##
 # Object that holds all calendar entry objects
 class CalendarEntryStore
   attr_reader :dates
@@ -9,6 +10,7 @@ class CalendarEntryStore
     @year = year
   end
 
+  ##
   # Creates a holiday based on the nth weekday of the month.
   def calculate_calendar_date(name, month, occurrence, weekday, type)
     selected_month = @year.months[month]

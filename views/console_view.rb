@@ -3,6 +3,7 @@ require_relative '../models/calendar_entry_store'
 require_relative '../models/markup'
 require 'date'
 
+##
 # Renders the supplied year class. Each month will be 20
 # chars wide. (2 digits * 7 + spacing between each column)
 # Header will be 86 characters wide (4 months + 2 chars padding between each)
@@ -13,6 +14,8 @@ class ConsoleView
     @v_div = ' '
   end
 
+  ##
+  # Print the complete calendar to the console.
   def print_calendar(year, calendar_entries)
     system 'clear'
     raise ArgumentError, 'Year argument must be of type Year. Got ' + year.class.to_s unless year.class == Year
@@ -20,6 +23,7 @@ class ConsoleView
     print_calendar_entries(calendar_entries)
   end
 
+  ##
   # Render all holidays as name - date
   def print_calendar_entries(calendar_entries)
     raise ArgumentError if calendar_entries.class != CalendarEntryStore

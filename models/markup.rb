@@ -1,8 +1,12 @@
-##
-# Base class for adding markup to views.
-class Markup
+# Handles date highlighting
+class ConsoleMarkup
   def initialize
-    raise 'Not Implemented'
+    @highlights = {
+      holiday: "\e[1m%<value>s\e[0m",
+      leap: "\e[1;32;47m%<value>s\e[0m",
+      friday13: "\e[41m%<value>s\e[0m",
+      none: '%<value>s'
+    }
   end
 
   ##
@@ -11,18 +15,6 @@ class Markup
     output = @highlights.fetch(key, :none)
     return value unless output
     format output, value: value
-  end
-end
-
-# Handles date highlighting
-class ConsoleMarkup < Markup
-  def initialize
-    @highlights = {
-      holiday: "\e[1m%<value>s\e[0m",
-      leap: "\e[1;32;47m%<value>s\e[0m",
-      friday13: "\e[41m%<value>s\e[0m",
-      none: '%<value>s'
-    }
   end
 
   def get_markup_block(content, _class = nil)
@@ -47,7 +39,7 @@ class ConsoleMarkup < Markup
 end
 
 # HTML highlighter
-class HTMLMarkup < Markup
+class HTMLMarkup < ConsoleMarkup
   def initialize
     @highlights = {
       holiday: '<span class="bold">%<value>s</span>',

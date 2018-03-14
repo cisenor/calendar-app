@@ -79,8 +79,8 @@ class App
     when :change_year
       prompt_for_year
       print_calendar
-    when :exit then @display.write 'Exiting...'
-    else @display.write 'Invalid input.'
+    when :exit then @display.log 'Exiting...'
+    else @display.log 'Invalid input.'
     end
   end
 

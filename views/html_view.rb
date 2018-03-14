@@ -5,7 +5,7 @@ require_relative '../models/calendar_entry_store.rb'
 
 ##
 # Outputs provided year's calendar to an HTML file.
-class HTMLView < ConsoleView
+class HTMLView
   ##
   # +filename+ Name of the output file, located in the dist folder.
   def initialize(filename, markup_class = HTMLMarkup)

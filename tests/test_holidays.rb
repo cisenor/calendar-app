@@ -34,6 +34,16 @@ class TestHolidays < Test::Unit::TestCase
     assert_equal :none, calendar_entries.styling(Date.new(2018, 12, 22))
   end
 
+  def test_holiday_equals
+    date1 = CalendarEntry.new('Christmas', Date.new(2018, 12, 25), :holiday)
+    date2 = CalendarEntry.new('Easter', Date.new(2018, 4, 2), :holiday)
+    date3 = CalendarEntry.new('Christmas', Date.new(2018, 12, 25), :holiday)
+    different_name = CalendarEntry.new('Chrimbo', Date.new(2018, 12, 25), :holiday)
+    assert_not_equal date1, date2
+    assert_not_equal date1, different_name
+    assert_equal date3, date1
+  end
+
   def test_get_holiday_type
     calendar_entries = CalendarEntryStore.new(Year.new(2000))
     calendar_entries.calculate_calendar_date('Easter', 3, 1, 1, :holiday)

@@ -18,8 +18,11 @@ class CalendarEntryStore
 
   def add_calendar_entry(name, date, type)
     raise ArgumentError unless date.class == Date
+    entry = CalendarEntry.new(name, date, type)
+    return if @dates.any? { |d| d == entry }
+    
     # We're good
-    @dates << CalendarEntry.new(name, date, type)
+    @dates << entry
     sort
   rescue StandardError
     puts 'Can\'t create holiday with provided date: ' + date.to_s
@@ -60,6 +63,10 @@ class CalendarEntry
     raise ArgumentError unless date.class == Date
     @date = date
     @type = type
+  end
+
+  def ==(other)
+    @date == other.date && @name == other.name
   end
 
   def to_s

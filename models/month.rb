@@ -1,6 +1,6 @@
 require 'date'
 ##
-# Defines a month object
+# Maintains a list of weeks / days
 class Month
   attr_reader :year
   attr_reader :name

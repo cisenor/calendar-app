@@ -23,7 +23,7 @@ class HTMLView < ConsoleView
     write create_html_element('div', year.year, 'centered header')
     months = create_months(year.months)
     write create_html_element('div', months, 'container')
-    print_calendar_entries calendar_entry_store
+    print_calendar_entries
     end_file
   end
 
@@ -42,9 +42,8 @@ class HTMLView < ConsoleView
 
   ##
   # Render all holidays as name - date
-  def print_calendar_entries(calendar_entries)
-    raise ArgumentError if calendar_entries.class != CalendarEntryStore
-    days = calendar_entries.dates.map(&:to_s)
+  def print_calendar_entries
+    days = @calendar_entry_store.dates.map(&:to_s)
     write create_html_element('div', 'Important Dates', 'header centered')
     write create_list(days)
   end

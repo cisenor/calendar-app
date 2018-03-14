@@ -18,6 +18,8 @@ class CalendarEntryStore
     add_calendar_entry(name, day, type)
   end
 
+  ##
+  # Create a new calendar entry and add it to the store.
   def add_calendar_entry(name, date, type)
     raise ArgumentError unless date.class == Date
     entry = CalendarEntry.new(name, date, type)

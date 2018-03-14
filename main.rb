@@ -5,6 +5,8 @@ require_relative 'models/calendar_entry_store'
 require_relative 'models/console'
 require_relative 'models/markup'
 require_relative 'views/html_view'
+require_relative 'models/config'
+require_relative 'models/json_parse'
 
 # Main app class.
 class App
@@ -16,6 +18,8 @@ class App
   end
 
   def main
+    @config = Config.new(JSONParser)
+    @config.load_configuration('config.json')
     prompt_for_year
     add_initial_markup
     print_calendar
@@ -45,12 +49,14 @@ class App
   end
 
   def add_initial_markup
-    rday = Date.new(@year.year, 11, 11)
-    christmas = Date.new(@year.year, 12, 25)
-    @calendar_entries.add_calendar_entry('Remembrance Day', rday, :holiday)
-    @calendar_entries.add_calendar_entry('Christmas Day', christmas, :holiday)
-    @calendar_entries.calculate_calendar_date('Easter', 3, 1, 1, :holiday)
-    @calendar_entries.calculate_calendar_date('Thanksgiving', 9, 2, 1, :holiday)
+    @config.calendar_entries.map do |entry|
+      if entry.date
+        d = Date.strptime(entry.date, '%m-%d')
+        @calendar_entries.add_calendar_entry(entry.name, d, :holiday)
+      else
+        @calendar_entries.calculate_calendar_date(entry.name, entry.month, entry.nth, entry.weekday, :holiday)
+      end
+    end
     check_for_friday_thirteenth
     check_for_leap
   end

@@ -86,7 +86,7 @@ class ConsoleView
     months.map do |month|
       week = month.weeks[week_num]
       next ' ' * 20 + @h_div unless week
-      week.map { |day| create_day_entry(day, calendar_entries) }.join(' ') + @h_div
+      (0..6).map { |day| create_day_entry(week[day], calendar_entries) }.join(' ') + @h_div
     end.join
   end
 

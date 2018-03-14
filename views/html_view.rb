@@ -75,8 +75,8 @@ class HTMLView < ConsoleView
 
   def create_weeks(month, holiday_list)
     month.weeks.map do |week|
-      week_str = week.map do |day|
-        create_day_entry(day, holiday_list)
+      week_str = (0..6).map do |day|
+        create_day_entry(week[day], holiday_list)
       end.join
       create_html_element('div', week_str, 'week')
     end.join

@@ -42,17 +42,9 @@ class Month
 
   def create_weeks
     @weeks = []
-    days = (@start_day..@last_day).map do |day|
-      Date.new(@year, @month, day)
-    end
+    days = (1..@last_day).map { |day| Date.new(@year, @month, day) }
     @weeks << create_first_week(days)
-    until days.empty?
-      week = []
-      7.times do
-        week << days.shift
-      end
-      @weeks << week
-    end
+    @weeks << days.shift(7) until days.empty?
   end
 
   def create_first_week(days)

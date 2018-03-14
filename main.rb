@@ -16,9 +16,7 @@ class App
   end
 
   def main
-    # prompt_for_year
-    @year = Year.new(2000)
-    @calendar_entries = CalendarEntryStore.new(@year)
+    prompt_for_year
     add_initial_markup
     print_calendar
     app_loop
@@ -49,25 +47,26 @@ class App
   def add_initial_markup
     rday = Date.new(@year.year, 11, 11)
     christmas = Date.new(@year.year, 12, 25)
-    @calendar_entries.calculate_calendar_date('Easter', 3, 1, 1, :holiday)
-    @calendar_entries.calculate_calendar_date('Thanksgiving', 9, 2, 1, :holiday)
     @calendar_entries.add_calendar_entry('Remembrance Day', rday, :holiday)
     @calendar_entries.add_calendar_entry('Christmas Day', christmas, :holiday)
+    @calendar_entries.calculate_calendar_date('Easter', 3, 1, 1, :holiday)
+    @calendar_entries.calculate_calendar_date('Thanksgiving', 9, 2, 1, :holiday)
     check_for_friday_thirteenth
     check_for_leap
   end
 
   def check_for_leap
     return unless @year.leap_year?
-    @calendar_entries.add_calendar_entry('Leap Day', Date.new(@year.year, 2, 29), :leap)
+    leap_day = Date.new(@year.year, 2, 29)
+    @calendar_entries.add_calendar_entry('Leap Day', leap_day, :leap)
   end
 
   def check_for_friday_thirteenth
     @year.months.each do |month|
       month.weeks.each do |week|
         day = week[5]
-        next unless day
-        @calendar_entries.add_calendar_entry('Friday the 13th', day, :friday13) if day.day == 13
+        next unless day && day.day == 13
+        @calendar_entries.add_calendar_entry('Friday the 13th', day, :friday13)
       end
     end
   end

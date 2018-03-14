@@ -14,14 +14,23 @@ class HTMLView < ConsoleView
   end
 
   ##
-  # Prints the calendar to the HTML file.
-  def print_calendar(year, calendar_entry_store)
+  # Prints the calendar to the HTML file, highlighting
+  # any days that are also stored in the calendar entry store.
+  def print_calendar(year, calendar_entry_store = nil)
+    @calendar_entry_store = calendar_entry_store
     raise ArgumentError 'Year must be a Year object.' if year.class != Year
     create_new_file
     write create_html_element('div', year.year, 'centered header')
-    write create_html_element('div', create_months(year.months, calendar_entry_store), 'container')
+    months = create_months(year.months)
+    write create_html_element('div', months, 'container')
     print_calendar_entries calendar_entry_store
     end_file
+  end
+
+  ##
+  # Logs text to the console, not to the HTML file.
+  def log(text)
+    puts text
   end
 
   ##
@@ -47,20 +56,22 @@ class HTMLView < ConsoleView
     create_html_element('ul', li, css_class)
   end
 
-  def create_months(months, holiday_list)
+  def create_months(months)
     months.map do |this_month|
       month_str = create_html_element('div', this_month.name, 'month-name')
       month_str << week_header
-      month_str << create_weeks(this_month, holiday_list)
+      month_str << create_weeks(this_month)
       create_html_element('div', month_str, 'month')
     end.join
   end
 
   # Create the day element. Either a 1-2 digit number with appropriate markup
   # or an empty span element
-  def create_day_entry(day, holiday_list)
+  def create_day_entry(day)
     return create_html_element('span', '') unless day
-    @markup.highlight(day.day, holiday_list.styling(day))
+    markup = :none
+    markup = @calendar_entry_store.styling(day) if @calendar_entry_store
+    @markup.highlight(day.day, markup)
   end
 
   def week_header
@@ -73,10 +84,10 @@ class HTMLView < ConsoleView
     write '</body></html>'
   end
 
-  def create_weeks(month, holiday_list)
+  def create_weeks(month)
     month.weeks.map do |week|
       week_str = (0..6).map do |day|
-        create_day_entry(week[day], holiday_list)
+        create_day_entry(week[day])
       end.join
       create_html_element('div', week_str, 'week')
     end.join

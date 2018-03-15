@@ -49,7 +49,6 @@ class HTMLView
 
   def get_calendar_entries(calendar_entries = nil)
     @calendar_entry_store = calendar_entries if calendar_entries
-    raise ArgumentError, 'Calendar entry store is null' unless @calendar_entry_store
     days = @calendar_entry_store.dates.map(&:to_s)
     imp_dates = @markup.get_markup_block('Important Dates', 'header centered')
     imp_dates << @markup.get_markup_list(days)

@@ -33,6 +33,10 @@ class ConfigEntry
     @date = hash['date']
     @name = hash['name']
     return unless hash['occurrence']
-    @month, @nth, @weekday = hash['occurrence'].to_s.split('/').map(&:to_i)
+    begin
+      @month, @nth, @weekday = hash['occurrence'].to_s.split('/').map { |v| Integer v }
+    rescue ArgumentError
+      raise ArgumentError, "Couldn't parse date from #{hash['occurrence']} for entry #{@name}"
+    end
   end
 end

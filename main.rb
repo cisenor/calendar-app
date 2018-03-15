@@ -21,7 +21,11 @@ class App
 
   def main
     @config = Config.new(JSONParser)
-    @config.load_configuration('config.json')
+    begin
+      @config.load_configuration('config.json')
+    rescue ArgumentError => arg_error
+      @display.log(arg_error.message)
+    end
     prompt_for_year
     add_initial_markup
     print_calendar
@@ -53,12 +57,16 @@ class App
   end
 
   def add_initial_markup
-    @config.calendar_entries.map do |entry|
+    @config.calendar_entries.each do |entry|
       if entry.date
         d = Date.strptime(entry.date, '%m-%d')
         @calendar_entries.add_calendar_entry(entry.name, d, :holiday)
       else
-        @calendar_entries.calculate_calendar_date(entry.name, entry.month, entry.nth, entry.weekday, :holiday)
+        begin
+          @calendar_entries.calculate_calendar_date(entry.name, entry.month, entry.nth, entry.weekday, :holiday)
+        rescue ArgumentError
+          @display.log "Could not create date from configuration for #{entry.name} on week #{entry.nth}, day #{entry.weekday} of month #{entry.month}"
+        end
       end
     end
     check_for_friday_thirteenth
@@ -117,5 +125,6 @@ OptionParser.new do |opts|
     view = :console
   end
 end.parse!
+
 app = App.new view
 app.main

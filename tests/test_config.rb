@@ -18,9 +18,16 @@ class TestDisplay < Test::Unit::TestCase
 
   def test_parses_calendar_entries_properly
     config = Config.new(JSONParser)
-    config.load_configuration('./config.json')
+    config.load_configuration('./tests/config.json')
     assert_equal 3, config.calendar_entries.size
     assert_equal 'Christmas', config.calendar_entries[0].name
     assert_equal 'Easter', config.calendar_entries[1].name
+  end
+
+  def test_raises_argument_error_on_invalid_config
+    config = Config.new(JSONParser)
+    assert_raise(ArgumentError) do
+      config.load_configuration('./tests/broken_config.json')
+    end
   end
 end

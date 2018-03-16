@@ -23,6 +23,7 @@ class Config
   end
 end
 
+# One date record in the calendar entries config
 class ConfigEntry
   attr_reader :date
   attr_reader :name
@@ -33,10 +34,11 @@ class ConfigEntry
     @date = hash['date']
     @name = hash['name']
     return unless hash['occurrence']
-    begin
-      @month, @nth, @weekday = hash['occurrence'].to_s.split('/').map { |v| Integer v }
-    rescue ArgumentError
-      raise ArgumentError, "Couldn't parse date from #{hash['occurrence']} for entry #{@name}"
+    @month, @nth, @weekday = hash['occurrence'].to_s.split('/').map do |v|
+      Integer v
     end
+  rescue ArgumentError
+    raise ArgumentError, "Couldn't parse date from #{hash['occurrence']} for \
+    entry #{@name}"
   end
 end

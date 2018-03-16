@@ -1,6 +1,6 @@
 require_relative '../models/year'
 require_relative '../models/calendar_entry_store'
-require_relative '../models/markup'
+require_relative '../models/formatters/console'
 require 'date'
 
 ##
@@ -8,60 +8,43 @@ require 'date'
 # chars wide. (2 digits * 7 + spacing between each column)
 # Header will be 86 characters wide (4 months + 2 chars padding between each)
 class ConsoleView
-  def initialize(markup_class = ConsoleMarkup)
-    @markup = markup_class.new
+  def initialize(markup_class = FormatConsole, log = ConsoleLog.new)
+    @markup = markup_class.new 86
     @h_div = '  '
     @v_div = ' '
+    @log = log
   end
 
-  ##
-  # logs text to the console.
-  def log(text)
-    puts text
+  def render(calendar)
+    print_calendar calendar
   end
 
-  ##
-  # Print the complete calendar to the console.
-  def print_calendar(year, calendar_entries = nil)
-    @calendar_entry_store = calendar_entries
-    system 'clear'
-    raise ArgumentError, 'Year argument must be of type Year. Got ' + year.class.to_s unless year.class == Year
-    write render_year(year)
-    write get_calendar_entries
-  end
-
-  def log_calendar_entries(calendar_entries = nil)
-    log get_calendar_entries(calendar_entries)
-  end
+  private
 
   def write(input)
     puts input
   end
 
-  private
+  ##
+  # Print the complete calendar to the console.
+  def print_calendar(view_model)
+    @calendar_entry_store = view_model.calendar_entries
+    system 'clear'
+    calendar = @markup.title_header(view_model.year)
+    calendar << display_months(view_model.months)
+    write calendar
+    write get_calendar_entries view_model.calendar_entries
+  end
 
-  def get_calendar_entries(calendar_entries = nil)
-    @calendar_entry_store = calendar_entries if calendar_entries
-    raise ArgumentError, 'Calendar entry store is null' unless @calendar_entry_store
-    days = @calendar_entry_store.dates.map(&:to_s)
-    imp_dates = @markup.get_markup_block('Important Dates', 'header centered')
-    imp_dates << @markup.get_markup_list(days)
+  def get_calendar_entries(calendar_entries)
+    days = calendar_entries.dates.map(&:to_s)
+    imp_dates = @markup.title_header('Important Dates')
+    imp_dates << @markup.list(days)
     imp_dates
   end
 
   def new_line
     puts ''
-  end
-
-  def render_year(year)
-    raise ArgumentError 'Year must be a Year object' if year.class != Year
-    months = year.months
-    calendar = justify(year.year, 86) + "\n"
-    calendar << display_months(months)
-  end
-
-  def justify(value, total)
-    value.to_s.center total
   end
 
   def find_longest_month(months)
@@ -79,9 +62,8 @@ class ConsoleView
 
   def display_months(months)
     calendar = ''
-    until months.empty?
-      these_months = months.shift(4)
-      calendar << these_months.map { |month| justify(month.name, 22) }.join + "\n"
+    months.each_slice(4) do |these_months|
+      calendar << these_months.map { |month| @markup.month_header(month.name) }.join + "\n"
       calendar << display_weekdays + "\n"
       calendar << get_days(these_months)
       calendar << @v_div * 86 + "\n"
@@ -106,7 +88,7 @@ class ConsoleView
   def create_day_entry(day)
     return '  ' unless day
     markup = :none
-    markup = @calendar_entry_store.styling(day) if @calendar_entry_store
-    @markup.highlight(day.day.to_s.rjust(2), markup)
+    markup = @calendar_entry_store.styling_tag(day) if @calendar_entry_store
+    @markup.style_text(day.day.to_s.rjust(2), markup)
   end
 end

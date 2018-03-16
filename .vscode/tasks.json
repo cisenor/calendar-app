@@ -11,7 +11,7 @@
     {
       "label": "Run",
       "type": "shell",
-      "command": "sass dist/styles.scss dist/styles.css && ruby main.rb",
+      "command": "sass dist/styles.scss dist/styles.css && ruby main.rb --console-only",
       "presentation": {
         "panel": "dedicated",
         "focus": true

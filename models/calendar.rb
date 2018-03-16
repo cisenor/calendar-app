@@ -6,6 +6,7 @@ class Calendar
   attr_reader :weekday_headers
   attr_reader :year
   attr_reader :months
+  attr_reader :binding
   def initialize(formatter = FormatHTML.new)
     @formatter = formatter
     @weekday_headers = %w[Su Mo Tu We Th Fr Sa]
@@ -22,10 +23,6 @@ class Calendar
   def get_style(day)
     style_tag = @calendar_entries.styling_tag(day)
     @formatter.styling(style_tag)
-  end
-
-  def get_binding
-    binding
   end
 
   private

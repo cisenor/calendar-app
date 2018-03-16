@@ -14,7 +14,9 @@ class App
     @user_input = Console.new
     @calendar = Calendar.new
     configure
-    @view = PrintToERB.new('views/templates/base_calendar.erb', 'dist/index.html')
+    template_path = 'views/templates/base_calendar.erb'
+    output_path = 'dist/index.html'
+    @view = PrintToERB.new(template_path, output_path)
     @view = ConsoleView.new if view == :console
   end
 
@@ -47,7 +49,7 @@ class App
   # Prompt the user for a year, then populate the
   # instance vars year and holiday list with the new values
   def prompt_for_year
-    @year = @user_input.prompt_for_input('Enter a year (four-digit number):').to_i
+    @year = @user_input.prompt_for_input('Enter a year:').to_i
     unless @year.between?(1970, 3000)
       puts 'The year must be between 1970 & 3000'
       prompt_for_year

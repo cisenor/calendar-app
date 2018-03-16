@@ -3,9 +3,9 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="header"><%= @year.year %></div>
+  <div class="header"><%= @year %></div>
   <div class="container">
-    <% @year.months.each do |month| %>
+    <% @months.each do |month| %>
     <div class="month">
       <div class="month-name"><%= month.name %></div>
       <div class="week-header">

@@ -1,5 +1,4 @@
 require_relative 'models/console'
-require_relative 'models/markup'
 require_relative 'views/erb_view'
 require_relative 'views/console_view'
 require_relative 'models/config'

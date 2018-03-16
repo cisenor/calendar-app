@@ -22,7 +22,7 @@ class FormatConsole
   end
 
   def title_header(text)
-    block(center(text))
+    block(center(String(text)))
   end
 
   def month_header(text)
@@ -32,5 +32,9 @@ class FormatConsole
   def style_text(text, style)
     output = @highlights.fetch(style, :none)
     format output, value: text
+  end
+
+  def list(array)
+    array.join("\n")
   end
 end

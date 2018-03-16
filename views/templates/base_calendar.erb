@@ -27,9 +27,14 @@
       </div>
     <% end %>
   </div>
-  <div class="header"></div>
+  <div class="important-dates">
+  <div class="header">Important Dates</div>
   <ul>
-    <li></li>
+    <% calendar_entries.dates.each do |entry| %>
+      <li><%= entry.to_s %></li>
+    <%end%>
   </ul>
+</div>
+  <%# render partial: '_important_dates.erb' %>
 </body>
 </html>

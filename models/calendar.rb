@@ -1,6 +1,7 @@
 require_relative 'formatters/html'
 require_relative 'calendar_entry_store'
 require_relative 'year'
+# Holds all pertinent calendar data
 class Calendar
   attr_reader :calendar_entries
   attr_reader :weekday_headers

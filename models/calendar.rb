@@ -5,6 +5,7 @@ class Calendar
   attr_reader :calendar_entries
   attr_reader :weekday_headers
   attr_reader :year
+  attr_reader :months
   def initialize(formatter = FormatHTML.new)
     @formatter = formatter
     @weekday_headers = %w[Su Mo Tu We Th Fr Sa]

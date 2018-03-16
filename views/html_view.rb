@@ -81,16 +81,12 @@ class HTMLView
 
   def create_weeks(month)
     month.weeks.map do |week|
-      week_str = (0..6).map do |day|
-        create_day_entry(week[day])
-      end.join
+      week_str = (0..6).map { |day| create_day_entry(week[day]) }.join
       @markup.get_markup_block(week_str, 'week')
     end.join
   end
 
   def initialize_new_file
-    File.open(@filename, 'w+', 0o644) do |file|
-      file.puts @markup.start
-    end
+    File.open(@filename, 'w+', 0o644) { |file| file.puts @markup.start }
   end
 end

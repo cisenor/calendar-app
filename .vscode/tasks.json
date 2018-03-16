@@ -3,15 +3,19 @@
   // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [{
-    "label": "Sass Compile",
-    "type": "shell",
-    "command": "sass dist/styles.scss dist/styles.css",
-    "group": "build"
-},
+      "label": "Sass Compile",
+      "type": "shell",
+      "command": "sass dist/styles.scss dist/styles.css",
+      "group": "build"
+    },
     {
       "label": "Run",
       "type": "shell",
       "command": "sass dist/styles.scss dist/styles.css && ruby main.rb",
+      "presentation": {
+        "panel": "dedicated",
+        "focus": true
+      },
       "group": {
         "kind": "build",
         "isDefault": true
@@ -20,7 +24,14 @@
     {
       "label": "Test",
       "type": "shell",
-      "command": "ruby tests/test_all.rb",
+      "command": "rspec",      
+      "args": [
+        "--pattern",
+        "${workspaceRoot}/spec/**/*_rspec.rb"
+      ],
+      "presentation": {
+        "panel": "dedicated"
+      },
       "group": {
         "kind": "test",
         "isDefault": true

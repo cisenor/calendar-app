@@ -7,6 +7,7 @@ require_relative 'models/markup'
 require_relative 'views/html_view'
 require_relative 'models/config'
 require_relative 'models/json_parse'
+require_relative 'utility/console_log'
 require 'optparse'
 
 # Main app class.
@@ -14,18 +15,12 @@ class App
   def initialize(view)
     @display = ConsoleView.new
     @display = HTMLView.new 'index.html' if view == :web
+    @log = ConsoleLog.new
     @user_input = Console.new
-    @input = ''
-    @year = 0
+    configure
   end
 
   def main
-    @config = Config.new(JSONParser)
-    begin
-      @config.load_configuration('config.json')
-    rescue ArgumentError => arg_error
-      @display.log(arg_error.message)
-    end
     prompt_for_year
     add_initial_markup
     print_calendar
@@ -33,6 +28,15 @@ class App
   end
 
   private
+
+  def configure
+    @config = Config.new(JSONParser)
+    begin
+      @config.load_configuration('config.json')
+    rescue ArgumentError => arg_error
+      @log.error(arg_error.message)
+    end
+  end
 
   def app_loop
     loop do

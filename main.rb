@@ -1,10 +1,5 @@
-require_relative 'models/month'
-require_relative 'models/year'
-require_relative 'views/console_view'
-require_relative 'models/calendar_entry_store'
 require_relative 'models/console'
 require_relative 'models/markup'
-require_relative 'views/html_view'
 require_relative 'views/erb_view'
 require_relative 'models/config'
 require_relative 'models/json_parse'
@@ -15,13 +10,11 @@ require 'optparse'
 # Main app class.
 class App
   def initialize(view)
-    @display = ConsoleView.new
-    @display = HTMLView.new 'index.html' if view == :web
     @log = ConsoleLog.new
     @user_input = Console.new
     @calendar = Calendar.new
     configure
-    @view = PrintToERB.new('views/base_calendar.erb', 'dist/index.html')
+    @view = PrintToERB.new('views/templates/base_calendar.erb', 'dist/index.html')
   end
 
   def main
@@ -43,9 +36,9 @@ class App
 
   def app_loop
     loop do
-      @input = @user_input.prompt_for_action
-      process_input
-      break if @input == :exit
+      input = @user_input.prompt_for_action
+      break if input == :exit
+      process_input input
     end
   end
 
@@ -61,15 +54,14 @@ class App
     @calendar.switch_to_year(@year, @config)
   end
 
-  def process_input
-    case @input
+  def process_input(input)
+    case input
     when :print_calendar then print_calendar
     when :print_calendar_dates then print_calendar_entries
     when :add_calendar_entry then add_calendar_entry
     when :change_year
       prompt_for_year
       print_calendar
-    when :exit then @log.info 'Exiting...'
     else @log.info 'Invalid input.'
     end
   end

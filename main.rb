@@ -1,6 +1,7 @@
 require_relative 'models/console'
 require_relative 'models/markup'
 require_relative 'views/erb_view'
+require_relative 'views/console_view'
 require_relative 'models/config'
 require_relative 'models/json_parse'
 require_relative 'utility/console_log'
@@ -15,6 +16,7 @@ class App
     @calendar = Calendar.new
     configure
     @view = PrintToERB.new('views/templates/base_calendar.erb', 'dist/index.html')
+    @view = ConsoleView.new if view == :console
   end
 
   def main
@@ -57,7 +59,6 @@ class App
   def process_input(input)
     case input
     when :print_calendar then print_calendar
-    when :print_calendar_dates then print_calendar_entries
     when :add_calendar_entry then add_calendar_entry
     when :change_year
       prompt_for_year
@@ -76,10 +77,6 @@ class App
 
   def print_calendar
     @view.render(@calendar)
-  end
-
-  def print_calendar_entries
-    @display.log_calendar_entries(@calendar.calendar_entries)
   end
 end
 

@@ -9,8 +9,9 @@ class PrintToERB
     @log.error "Could not find template file at #{template_path}"
   end
 
-  def render(bind)
+  def render(bind, dest)
     raise 'No ERB template is loaded.' unless @template
-    ERB.new(@template).run(bind)
+    populated = ERB.new(@template).run(bind)
+    File.open(dest, 'w+', 0o644) { |file| file.puts populated }
   end
 end

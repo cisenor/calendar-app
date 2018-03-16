@@ -8,9 +8,23 @@
     <% @year.months.each do |month| %>
     <div class="month">
       <div class="month-name"><%= month.name %></div>
-      <div class="week-header"></div>
-      <div class="week"></div>
-    </div>
+      <div class="week-header">
+        <% weekday_headers.each do |header| %>
+          <span><%= header %></span>
+        <% end %>
+      </div>
+        <% month.weeks.each do |week| %>
+          <div class="week">
+            <% week.each do |day| %>
+              <% if day %>
+                <span class="<%= get_style(day)%>"><%= day.day %></span>
+              <% else %>
+                <span></span>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
     <% end %>
   </div>
   <div class="header"></div>

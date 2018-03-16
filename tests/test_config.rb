@@ -2,7 +2,7 @@ require 'test/unit'
 require_relative '../models/config'
 require_relative '../models/json_parse'
 # Class used for testing the month class.
-class TestDisplay < Test::Unit::TestCase
+class TestConfig < Test::Unit::TestCase
   def test_can_read_config
     config = Config.new(JSONParser)
     config.load_configuration('./config.json')

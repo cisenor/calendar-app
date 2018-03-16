@@ -10,7 +10,8 @@ class Month
   def initialize(year, month)
     @year = year
     @month = month
-    d = Date.civil(@year, @month, -1) # -1 in the day parameter will return the last day of that day
+    # -1 in the day parameter will return the last day
+    d = Date.civil(@year, @month, -1)
     @last_day = d.day
     @name = Date::MONTHNAMES[@month]
     create_weeks

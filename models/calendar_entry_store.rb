@@ -8,6 +8,8 @@ class CalendarEntryStore
     @dates = []
     raise ArgumentError, "Year parameter must be of type Year, got #{year.class}" unless year.class == Year
     @year = year
+    check_for_friday_thirteenth
+    check_for_leap
   end
 
   ##
@@ -33,7 +35,7 @@ class CalendarEntryStore
 
   ##
   # Get the styling key for the provided date
-  def styling(date)
+  def styling_tag(date)
     day = get_calendar_entry_by_date date
     return day.type if day
     :none
@@ -44,6 +46,22 @@ class CalendarEntryStore
   end
 
   private
+
+  def check_for_leap
+    return unless @year.leap_year?
+    leap_day = Date.new(@year.year, 2, 29)
+    add_calendar_entry('Leap Day', leap_day, :leap)
+  end
+
+  def check_for_friday_thirteenth
+    @year.months.each do |month|
+      month.weeks.each do |week|
+        day = week[5]
+        next unless day && day.day == 13
+        add_calendar_entry('Friday the 13th', day, :friday13)
+      end
+    end
+  end
 
   def get_calendar_entry_by_date(date)
     @dates.find { |d| d.date == date }

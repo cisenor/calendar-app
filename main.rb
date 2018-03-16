@@ -5,9 +5,11 @@ require_relative 'models/calendar_entry_store'
 require_relative 'models/console'
 require_relative 'models/markup'
 require_relative 'views/html_view'
+require_relative 'views/erb_view'
 require_relative 'models/config'
 require_relative 'models/json_parse'
 require_relative 'utility/console_log'
+require_relative 'models/calendar'
 require 'optparse'
 
 # Main app class.
@@ -17,12 +19,13 @@ class App
     @display = HTMLView.new 'index.html' if view == :web
     @log = ConsoleLog.new
     @user_input = Console.new
+    @calendar = Calendar.new
     configure
+    @view = PrintToERB.new('views/base_calendar.erb', 'dist/index.html')
   end
 
   def main
     prompt_for_year
-    add_initial_markup
     print_calendar
     app_loop
   end
@@ -50,47 +53,12 @@ class App
   # Prompt the user for a year, then populate the
   # instance vars year and holiday list with the new values
   def prompt_for_year
-    year = @user_input.prompt_for_input('Enter a year (four-digit number):').to_i
-    unless year.between?(1970, 3000)
+    @year = @user_input.prompt_for_input('Enter a year (four-digit number):').to_i
+    unless @year.between?(1970, 3000)
       puts 'The year must be between 1970 & 3000'
-      return prompt_for_year
+      prompt_for_year
     end
-    @year = Year.new(year)
-    @calendar_entries = CalendarEntryStore.new(@year)
-    add_initial_markup
-  end
-
-  def add_initial_markup
-    @config.calendar_entries.each do |entry|
-      if entry.date
-        d = Date.strptime(entry.date, '%m-%d')
-        @calendar_entries.add_calendar_entry(entry.name, d, :holiday)
-      else
-        begin
-          @calendar_entries.calculate_calendar_date(entry.name, entry.month, entry.nth, entry.weekday, :holiday)
-        rescue ArgumentError
-          @display.log "Could not create date from configuration for #{entry.name} on week #{entry.nth}, day #{entry.weekday} of month #{entry.month}"
-        end
-      end
-    end
-    check_for_friday_thirteenth
-    check_for_leap
-  end
-
-  def check_for_leap
-    return unless @year.leap_year?
-    leap_day = Date.new(@year.year, 2, 29)
-    @calendar_entries.add_calendar_entry('Leap Day', leap_day, :leap)
-  end
-
-  def check_for_friday_thirteenth
-    @year.months.each do |month|
-      month.weeks.each do |week|
-        day = week[5]
-        next unless day && day.day == 13
-        @calendar_entries.add_calendar_entry('Friday the 13th', day, :friday13)
-      end
-    end
+    @calendar.switch_to_year(@year, @config)
   end
 
   def process_input
@@ -101,8 +69,8 @@ class App
     when :change_year
       prompt_for_year
       print_calendar
-    when :exit then @display.log 'Exiting...'
-    else @display.log 'Invalid input.'
+    when :exit then @log.info 'Exiting...'
+    else @log.info 'Invalid input.'
     end
   end
 
@@ -110,16 +78,16 @@ class App
     name = @user_input.prompt_for_input('Which holiday would you like to add? ')
     date = @user_input.prompt_for_input('What date does the holiday fall on? (mm-dd format) ')
     d = Date.strptime(date, '%m-%d')
-    @calendar_entries.add_calendar_entry(name, d, :holiday)
-    @display.print_calendar(@year, @calendar_entries)
+    @calendar.calendar_entries.add_calendar_entry(name, d, :holiday)
+    print_calendar
   end
 
   def print_calendar
-    @display.print_calendar(@year, @calendar_entries)
+    @view.render(@calendar)
   end
 
   def print_calendar_entries
-    @display.log_calendar_entries(@calendar_entries)
+    @display.log_calendar_entries(@calendar.calendar_entries)
   end
 end
 

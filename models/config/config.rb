@@ -9,7 +9,11 @@ class Config
   def load_configuration(path)
     raise IOError, "File at #{path} doesn't exist." unless File.file? path
     str = File.read(path)
-    config = @parser.parse(str)
+    begin
+      config = @parser.parse(str)
+    rescue JSON::ParserError
+      raise ArgumentError, "The file at #{path} contains invalid JSON"
+    end
     return unless config_is_valid?(config)
     @calendar_entries = config['calendar-entries'].map do |hash|
       ConfigEntry.new(hash)

@@ -21,7 +21,8 @@ class App
   end
 
   def main
-    prompt_for_year
+    # prompt_for_year
+    @calendar.switch_to_year(2011,@config)
     print_calendar
     app_loop
   end
